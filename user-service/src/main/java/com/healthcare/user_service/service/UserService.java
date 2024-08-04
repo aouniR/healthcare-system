@@ -2,27 +2,14 @@ package com.healthcare.user_service.service;
 
 
 import com.healthcare.user_service.entity.User;
-import com.healthcare.user_service.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
-@Service
-public class UserService {
-
-    @Autowired
-    private UserRepository userRepository;
-
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
-
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
-    public User save(User user) {
-        return userRepository.save(user);
-    }
+public interface UserService {
+    List<User> getAllUsers();
+    User getUserById(UUID id);
+    User saveUser(User User);
+    void deleteUser(UUID id);
 }
+
