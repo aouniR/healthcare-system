@@ -5,6 +5,8 @@ import java.util.UUID;
 import jakarta.persistence.*;
 
 @Data
+@Table
+@Builder
 @Entity
 public class User {
 
