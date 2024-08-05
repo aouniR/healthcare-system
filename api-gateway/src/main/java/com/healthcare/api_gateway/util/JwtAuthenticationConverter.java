@@ -23,11 +23,11 @@ public class JwtAuthenticationConverter implements ServerAuthenticationConverter
         String authorizationHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String token = authorizationHeader.substring(7);
-            String username = jwtUtil.extractUsername(token);
+            String email = jwtUtil.extractEmail(token);
 
-            if (username != null && jwtUtil.validateToken(token, username)) {
+            if (email != null && jwtUtil.validateToken(token, email)) {
                 return Mono.just(new UsernamePasswordAuthenticationToken(
-                        username, 
+                        email, 
                         null, 
                         Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
                 ));

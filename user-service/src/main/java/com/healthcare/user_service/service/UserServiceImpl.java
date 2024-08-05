@@ -1,7 +1,9 @@
 package com.healthcare.user_service.service;
 
+
 import com.healthcare.user_service.entity.User;
 import com.healthcare.user_service.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +14,17 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
     
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository){
-        this.userRepository=userRepository;
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public boolean verifyUserCredentials(String username, String password) {
+        User user = userRepository.findByUsername(username);
+        return user != null && passwordEncoder.matches(password, user.getPassword());
     }
 
     @Override
@@ -30,6 +39,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User saveUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -37,6 +47,20 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(UUID id) {
         userRepository.deleteById(id);
     }
+
+    public User updateUser(UUID id, User user) {
+        User existingUser = userRepository.findById(id).orElse(null);
+        if (existingUser != null) {
+            existingUser.setFirstname(user.getFirstname());
+            existingUser.setLastname(user.getLastname());
+            existingUser.setEmail(user.getEmail());
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            existingUser.setTypeProfil(user.getTypeProfil());
+            return userRepository.save(existingUser);
+        }
+        return null;
+    }
+
 }
 
 

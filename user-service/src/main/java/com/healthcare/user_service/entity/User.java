@@ -14,11 +14,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name="userID")
     private UUID id;
-    @Column(name="userName")
-    private String username;
+    @Column(name="firstName")
+    private String firstname;
+    @Column(name="lastName")
+    private String lastname;
     @Column(name="Email")
     private String email;
     @Column(name="peassword")
     private String password;
-
+    @Enumerated(EnumType.STRING)
+    @Column(name="type")
+    private TypeProfil typeProfil;
+    
 }
