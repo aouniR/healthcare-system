@@ -3,7 +3,6 @@ version: '3.8'
 services:
   api-gateway:
     image: apigateway:latest
-    build: ./api-gateway
     ports:
       - "8080:8080"
     networks:
@@ -11,7 +10,6 @@ services:
 
   user-service:
     image: userservice:latest
-    build: ./user-service
     environment:
       USER_DB_PASSWORD: ${USER_DB_PASSWORD}
       SPRING_DATASOURCE_URL: jdbc:postgresql://user-service-db:5432/userdb
@@ -32,7 +30,6 @@ services:
 
   metamodel-service:
     image: metamodelservice:latest
-    build: ./metamodel-service
     environment:
       METAMODELE_DB_PASSWORD: ${METAMODELE_DB_PASSWORD}
       SPRING_DATASOURCE_URL: jdbc:postgresql://metamodel-service-db:5432/metamodeldb
@@ -53,7 +50,6 @@ services:
 
   medical-record-service:
     image: medicalrecordservice:latest
-    build: ./medical-record-service
     environment:
       MEDICAL_RECORD_DB_PASSWORD: ${MEDICAL_RECORD_DB_PASSWORD}
       SPRING_DATASOURCE_URL: jdbc:postgresql://medical-record-service-db:5432/medicalrecorddb
@@ -74,7 +70,6 @@ services:
 
   medical-component-service:
     image: medicalcomponentservice:latest
-    build: ./medical-component-service
     environment:
       MEDICAL_COMPONENT_DB_PASSWORD: ${MEDICAL_COMPONENT_DB_PASSWORD}
       SPRING_DATASOURCE_URL: jdbc:postgresql://medical-component-service-db:5432/medicalcomponentdb
@@ -95,7 +90,6 @@ services:
 
   notification-service:
     image: notificationservice:latest
-    build: ./notification-service
     environment:
       NOTIFICATION_DB_PASSWORD: ${NOTIFICATION_DB_PASSWORD}
       SPRING_DATASOURCE_URL: jdbc:postgresql://notification-service-db:5432/notificationdb
@@ -129,4 +123,3 @@ services:
 networks:
   healthcare-net:
     driver: overlay
-
