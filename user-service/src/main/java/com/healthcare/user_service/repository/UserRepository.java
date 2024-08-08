@@ -8,6 +8,6 @@ import com.healthcare.user_service.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
-    User findByUsername(String username);
+    User findByEmail(String email);
 }
 

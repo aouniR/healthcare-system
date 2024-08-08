@@ -1,0 +1,6 @@
+# Stage 1: Test
+FROM maven:latest AS test
+RUN apt-get update && apt-get install -y postgresql-client
+COPY test-db.sh /usr/local/bin/test-db.sh
+RUN chmod +x /usr/local/bin/test-db.sh
+CMD ["test-db.sh"]

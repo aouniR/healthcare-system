@@ -1,15 +1,12 @@
 package com.healthcare.api_gateway;
 
 import com.healthcare.api_gateway.filter.JwtAuthenticationFilter;
-import com.healthcare.api_gateway.util.JwtAuthenticationConverter;
-import com.healthcare.api_gateway.util.JwtUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
 
 
 @SpringBootApplication
@@ -20,7 +17,7 @@ public class ApiGatewayApplication {
         SpringApplication.run(ApiGatewayApplication.class, args);
     }
 
-    @Bean
+ @Bean
     public RouteLocator customRouteLocator(RouteLocatorBuilder builder, JwtAuthenticationFilter jwtAuthenticationFilter) {
         return builder.routes()
             .route("user-service", r -> r.path("/api/users/**")
@@ -39,15 +36,5 @@ public class ApiGatewayApplication {
                 .filters(f -> f.filters(jwtAuthenticationFilter)) 
                 .uri("lb://NOTIFICATION-SERVICE"))
             .build();
-    }
-
-    @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter(ServerAuthenticationConverter authenticationConverter) {
-        return new JwtAuthenticationFilter(authenticationConverter);
-    }
-
-    @Bean
-    public ServerAuthenticationConverter authenticationConverter(JwtUtil jwtUtil) {
-        return new JwtAuthenticationConverter(jwtUtil);
     }
 }

@@ -7,5 +7,6 @@ RUN mvn clean install
 # Stage 2: Run
 FROM openjdk:17-jdk-slim
 VOLUME /tmp
-COPY target/metamodel-service-0.0.1-SNAPSHOT.jar metamodel-service.jar
+WORKDIR /app
+COPY --from=build /app/target/metamodel-service-0.0.1-SNAPSHOT.jar metamodel-service.jar
 ENTRYPOINT ["java", "-jar", "/metamodel-service.jar"]

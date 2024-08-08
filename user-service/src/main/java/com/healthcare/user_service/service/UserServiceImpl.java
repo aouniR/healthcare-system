@@ -22,8 +22,8 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public boolean verifyUserCredentials(String username, String password) {
-        User user = userRepository.findByUsername(username);
+    public boolean verifyUserCredentials(String email, String password) {
+        User user = userRepository.findByEmail(email);
         return user != null && passwordEncoder.matches(password, user.getPassword());
     }
 

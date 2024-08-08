@@ -11,8 +11,9 @@ services:
   user-service:
     image: userservice:latest
     environment:
-      USER_DB_PASSWORD: ${USER_DB_PASSWORD}
       SPRING_DATASOURCE_URL: jdbc:postgresql://user-service-db:5432/userdb
+      SPRING_DATASOURCE_USERNAME: user_service
+      SPRING_DATASOURCE_PASSWORD: ${USER_DB_PASSWORD}
     depends_on:
       - user-service-db
       - kafka
