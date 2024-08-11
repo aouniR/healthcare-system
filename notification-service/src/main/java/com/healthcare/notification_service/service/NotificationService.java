@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.UUID;
 
 import com.healthcare.notification_service.entity.Notification;
+import com.healthcare.notification_service.request.SendNotificationRequest;
 
 public interface NotificationService {
     List<Notification> getAllNotifications();
     Notification getNotificationById(UUID id);
-    Notification saveNotification(Notification Notification);
+    void saveNotification(SendNotificationRequest request);
     void deleteNotification(UUID id);
+    List<Notification> getAllNotificationsByUserId(UUID id);
 }

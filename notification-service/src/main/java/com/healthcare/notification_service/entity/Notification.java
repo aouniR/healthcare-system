@@ -1,11 +1,15 @@
 package com.healthcare.notification_service.entity;
 
 import lombok.*;
+
+import java.time.LocalDateTime;
 import java.util.UUID;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.*;
 
 @Data
-@Table
 @Builder
 @Entity
 public class Notification {
@@ -13,11 +17,10 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name="notificationID")
     private UUID id;
-
-    @Column(name="message")
+    private UUID userId;
     private String message;
-    @Column(name="destinataire")
-    private String destinataire;  
+    @CreationTimestamp
+    private LocalDateTime creationTimestamp;
 }
 
 
