@@ -1,48 +1,42 @@
 package com.healthcare.api_gateway.config;
 
 import com.healthcare.api_gateway.filter.JwtAuthenticationFilter;
-import com.healthcare.api_gateway.util.JwtAuthenticationConverter;
-import com.healthcare.api_gateway.util.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.gateway.route.RouteLocator;
+import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
-import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.web.server.SecurityWebFilterChain;
-import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
-import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class SecurityConfig {
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final JwtAuthenticationFilter filter;
 
-    @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-        return http
-                .csrf().disable()
-                .authorizeExchange(exchanges -> exchanges
-                        .pathMatchers("/api/users/login","/api/users/register").permitAll() 
-                        .anyExchange().authenticated()) 
-                .addFilterAt(jwtAuthenticationFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
-                .build();
+    private SecurityConfig(JwtAuthenticationFilter filter){
+        this.filter=filter;
     }
 
-    @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(authenticationConverter());
+    @Bean 
+    public RouteLocator routes(RouteLocatorBuilder builder){
+        return builder.routes()
+        .route("auth-service", r -> r.path("/api/v1/auth/**")
+            .filters(f -> f.filters(filter))
+            .uri("lb://auth-service")) 
+        .route("user-service", r -> r.path("/api/v1/users/**")
+            .filters(f -> f.filters(filter)) 
+            .uri("lb://user-service"))
+        .route("metamodel-service", r -> r.path("/api/v1/metamodels/**")
+            .filters(f -> f.filters(filter))
+            .uri("lb://metamodel-service"))
+        .route("medical-record-service", r -> r.path("/api/v1/medicalrecords/**")
+            .filters(f -> f.filters(filter))
+            .uri("lb://medical-record-service"))
+        .route("medical-component-service", r -> r.path("/api/v1/medicalcomponents/**")
+            .filters(f -> f.filters(filter)) 
+            .uri("lb://medical-component-service"))
+        .route("notification-service", r -> r.path("/api/v1/notifications/**")
+            .filters(f -> f.filters(filter)) 
+            .uri("lb://notification-service"))
+        .build();
     }
 
-    @Bean
-    public ServerAuthenticationConverter authenticationConverter() {
-        return new JwtAuthenticationConverter(jwtUtil);
-    }
-
-    @Bean
-    @LoadBalanced
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
 }

@@ -2,8 +2,13 @@ package com.healthcare.user_service.service;
 
 
 import com.healthcare.user_service.entity.User;
+import com.healthcare.user_service.exception.NotFoundException;
 import com.healthcare.user_service.repository.UserRepository;
+import com.healthcare.user_service.request.RegisterRequest;
+import com.healthcare.user_service.request.UserUpdateRequest;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,16 +20,15 @@ public class UserServiceImpl implements UserService {
     
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, 
+                            PasswordEncoder passwordEncoder,
+                            ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    public boolean verifyUserCredentials(String email, String password) {
-        User user = userRepository.findByEmail(email);
-        return user != null && passwordEncoder.matches(password, user.getPassword());
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -34,33 +38,47 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserById(UUID id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
     @Override
-    public User saveUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
     @Override
-    public void deleteUser(UUID id) {
-        userRepository.deleteById(id);
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
-    public User updateUser(UUID id, User user) {
-        User existingUser = userRepository.findById(id).orElse(null);
-        if (existingUser != null) {
-            existingUser.setFirstname(user.getFirstname());
-            existingUser.setLastname(user.getLastname());
-            existingUser.setEmail(user.getEmail());
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            existingUser.setTypeProfil(user.getTypeProfil());
-            return userRepository.save(existingUser);
-        }
-        return null;
+    @Override
+    public User updateUserById(UserUpdateRequest request) {
+        User toUpdate = userRepository.findById(request.getId())
+        .orElseThrow(() -> new NotFoundException("User not found"));
+        modelMapper.map(request, toUpdate);
+        return userRepository.save(toUpdate);
     }
 
+    @Override
+    public User saveUser(RegisterRequest request) {
+        User toSave = User.builder()
+        .username(request.getUsername())
+        .password(passwordEncoder.encode(request.getPassword()))
+        .email(request.getEmail())
+        .typeProfil(request.getTypeProfil())
+        .build();
+        return userRepository.save(toSave);
+    }
+
+    @Override
+    public void deleteUserById(UserUpdateRequest request) {
+        User toDelete = userRepository.findById(request.getId())
+        .orElseThrow(() -> new NotFoundException("User not found"));
+        userRepository.save(toDelete);
+    }
 }
 
 
