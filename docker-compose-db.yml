@@ -8,8 +8,6 @@ services:
       POSTGRES_PASSWORD: ${USER_DB_PASSWORD}
     ports:
       - "5432:5432"
-    networks:
-      - healthcare-net
 
   metamodel-service-db:
     image: postgres:14
@@ -20,8 +18,6 @@ services:
       POSTGRES_PASSWORD: ${METAMODELE_DB_PASSWORD}
     ports:
       - "5433:5432"
-    networks:
-      - healthcare-net
 
   medical-record-service-db:
     image: postgres:14
@@ -32,8 +28,6 @@ services:
       POSTGRES_PASSWORD: ${MEDICAL_RECORD_DB_PASSWORD}
     ports:
       - "5434:5432"
-    networks:
-      - healthcare-net
 
   medical-component-service-db:
     image: postgres:14
@@ -44,8 +38,6 @@ services:
       POSTGRES_PASSWORD: ${MEDICAL_COMPONENT_DB_PASSWORD}
     ports:
       - "5435:5432"
-    networks:
-      - healthcare-net
 
   notification-service-db:
     image: postgres:14
@@ -56,9 +48,3 @@ services:
       POSTGRES_PASSWORD: ${NOTIFICATION_DB_PASSWORD}
     ports:
       - "5436:5432"
-    networks:
-      - healthcare-net
-
-networks:
-  healthcare-net:
-    driver: bridge

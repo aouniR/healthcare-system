@@ -44,7 +44,7 @@ public class AuthConfig {
                 "/swagger-ui.html/**",
                 "/swagger-resources/**",
                 "/swagger-ui/**",
-                "/v3/api-docs/**");
+                "/v1/api-docs/**");
     }
 
     @Bean

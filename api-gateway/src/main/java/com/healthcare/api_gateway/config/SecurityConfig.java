@@ -1,19 +1,19 @@
 package com.healthcare.api_gateway.config;
 
 import com.healthcare.api_gateway.filter.JwtAuthenticationFilter;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter filter;
-
-    private SecurityConfig(JwtAuthenticationFilter filter){
-        this.filter=filter;
-    }
 
     @Bean 
     public RouteLocator routes(RouteLocatorBuilder builder){
