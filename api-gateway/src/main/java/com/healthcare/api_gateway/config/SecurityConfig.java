@@ -18,9 +18,9 @@ public class SecurityConfig {
     @Bean 
     public RouteLocator routes(RouteLocatorBuilder builder){
         return builder.routes()
-        .route("auth-service", r -> r.path("/api/v1/auth/**")
+        .route("authentication-service", r -> r.path("/api/v1/auth/**")
             .filters(f -> f.filters(filter))
-            .uri("lb://auth-service")) 
+            .uri("lb://authentication-service")) 
         .route("user-service", r -> r.path("/api/v1/users/**")
             .filters(f -> f.filters(filter)) 
             .uri("lb://user-service"))

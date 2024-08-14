@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: file:///C:/Users/unknown/Documents/PFE/healthcare-system/healthcare-system-config
+          searchPaths: '{application}'
+server:
+  port: 8888
+

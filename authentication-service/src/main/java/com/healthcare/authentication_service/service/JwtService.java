@@ -6,7 +6,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -19,8 +18,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JwtService {
     private final CustomUserDetailsService customUserDetailsService;
-    @Value("${jwt.secret-key}")
-    private String secretKey;
+//    @Value("${jwt.secret-key}")
+    private final String secretKey= "8bTjzD5Yl4I9jQ8M7G3wD1k+S3ZbqC+7e8A1aPqF2B4W=";
     public String generateToken(String username) {
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
         Map<String, Object> claims = new HashMap<>();
