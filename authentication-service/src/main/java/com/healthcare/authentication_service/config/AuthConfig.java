@@ -22,7 +22,7 @@ public class AuthConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(csrf -> csrf.disable())
                     .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("v1/auth/**").permitAll())
+                    .requestMatchers("/auth/**").permitAll())
                 .build();
     }
 
@@ -31,6 +31,7 @@ public class AuthConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -39,12 +40,12 @@ public class AuthConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
-                .requestMatchers("/v1/auth/**",
+                .requestMatchers("/auth/**",
                 "/swagger-resources/**",
                 "/swagger-ui.html/**",
                 "/swagger-resources/**",
                 "/swagger-ui/**",
-                "/v1/api-docs/**");
+                "/api-docs/**");
     }
 
     @Bean

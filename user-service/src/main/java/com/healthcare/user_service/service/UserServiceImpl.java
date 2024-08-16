@@ -6,7 +6,6 @@ import com.healthcare.user_service.exception.NotFoundException;
 import com.healthcare.user_service.repository.UserRepository;
 import com.healthcare.user_service.request.RegisterRequest;
 import com.healthcare.user_service.request.UserUpdateRequest;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,22 +13,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
 
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService {
     
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, 
-                            PasswordEncoder passwordEncoder,
-                            ModelMapper modelMapper) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.modelMapper = modelMapper;
-    }
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<User> getAllUsers() {
