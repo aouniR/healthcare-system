@@ -1,7 +1,7 @@
 package com.healthcare.user_service.request;
 
 
-import com.healthcare.user_service.entity.TypeProfil;
+import com.healthcare.user_service.entity.Role;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -22,5 +22,5 @@ public class RegisterRequest {
     @Email(message = "Email should be valid")
     private String email;
     @NotBlank(message = "Role is required, it must be 'ADMIN','PROFESSIONNELDESANTE','AGENTADMINISTRATIF'")
-    private TypeProfil typeProfil ;
+    private Role role ;
 }

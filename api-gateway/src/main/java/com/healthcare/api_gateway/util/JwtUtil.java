@@ -13,8 +13,8 @@ import java.security.Key;
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret-key}")
-    private String secretKey;
+    // @Value("${jwt.secret-key}")
+    private final String secretKey="8bTjzD5Yl4I9jQ8M7G3wD1k+S3ZbqC+7e8A1aPqF2B4W=";
 
 
     private Key getSignKey() {

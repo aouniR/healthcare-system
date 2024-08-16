@@ -18,8 +18,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class JwtService {
     private final CustomUserDetailsService customUserDetailsService;
-//    @Value("${jwt.secret-key}")
-    private final String secretKey= "8bTjzD5Yl4I9jQ8M7G3wD1k+S3ZbqC+7e8A1aPqF2B4W=";
+   // @Value("${jwt.secret-key}")
+    private final String secretKey="8bTjzD5Yl4I9jQ8M7G3wD1k+S3ZbqC+7e8A1aPqF2B4W=";
     public String generateToken(String username) {
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
         Map<String, Object> claims = new HashMap<>();

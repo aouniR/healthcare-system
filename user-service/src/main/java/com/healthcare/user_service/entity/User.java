@@ -5,21 +5,21 @@ import java.util.UUID;
 import jakarta.persistence.*;
 
 
-@Data
-@Table
 @Builder
-@Entity
-@EqualsAndHashCode(callSuper=false)
+@NoArgsConstructor 
+@AllArgsConstructor
+@Entity(name="users")
+@Getter
+@Setter
 public class User extends BaseEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID userid;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
     private String username;
-    @Column(unique = true, nullable = false,updatable = false, name="Email")
+    @Column(unique = true, nullable = false,updatable = false)
     private String email;
     @Column(nullable = false)
     private String password;
     @Enumerated(EnumType.STRING)
-    private TypeProfil typeProfil;  
-    
+    private Role role;  
 }

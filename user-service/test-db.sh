@@ -1,4 +1,5 @@
 #!/bin/sh
+PGPASSWORD="E8C7D%j9@#G5Z!2u8q&1E8kLx9m^Wb7S"
 
 # Ensure the environment variable is set
 if [ -z "$PGPASSWORD" ]; then
@@ -12,7 +13,7 @@ echo "Testing database connection..."
 timeout=300  # Timeout after 5 minutes
 start_time=$(date +%s)
 
-until psql -h user-service-db -U user_service -d userdb -c '\q'; do
+until psql -h localhost -p 5432 -U user_service -d userdb  '\q'; do
   current_time=$(date +%s)
   elapsed_time=$((current_time - start_time))
 

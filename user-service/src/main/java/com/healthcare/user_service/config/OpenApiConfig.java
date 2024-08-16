@@ -14,10 +14,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenApiConfig {
     @Bean
-    public OpenAPI openAPI(@Value("${application-title}") String title,
-                           @Value("${application-description}") String description,
-                           @Value("${application-version}") String version,
-                           @Value("${application-license}") String license) {
+    public OpenAPI openAPI(@Value("${spring.application.application-title}") String title,
+                           @Value("${spring.application.application-description}") String description,
+                           @Value("${spring.application.application-version}") String version,
+                           @Value("${spring.application.application-license}") String license) {
         return new OpenAPI().addSecurityItem(new SecurityRequirement()
                         .addList("Bearer Authentication"))
                 .components(new Components().addSecuritySchemes

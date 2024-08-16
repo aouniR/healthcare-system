@@ -1,7 +1,7 @@
 package com.healthcare.user_service;
 
 import com.healthcare.user_service.entity.User;
-import com.healthcare.user_service.entity.TypeProfil;
+import com.healthcare.user_service.entity.Role;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -32,7 +32,7 @@ public class UserServiceApplication implements CommandLineRunner{
                 .username("admin")
                 .email("admin@gmail.com")
                 .password(pass)
-                .typeProfil(TypeProfil.ADMIN).build();
+                .role(Role.ADMIN).build();
         if (userRepository.findByUsername("admin").isEmpty()) userRepository.save(admin);
     }
 }

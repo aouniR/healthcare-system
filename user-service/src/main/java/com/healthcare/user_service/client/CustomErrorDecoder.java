@@ -20,7 +20,6 @@ public class CustomErrorDecoder implements ErrorDecoder {
     public Exception decode(String methodKey, Response response) {
         ObjectMapper mapper = new ObjectMapper();
         try (InputStream body = response.body().asInputStream()) {
-            // Use TypeReference to ensure type safety
             Map<String, String> errors = mapper.readValue(
                     IOUtils.toString(body, StandardCharsets.UTF_8),
                     new TypeReference<Map<String, String>>() {}

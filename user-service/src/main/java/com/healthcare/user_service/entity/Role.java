@@ -1,6 +1,6 @@
 package com.healthcare.user_service.entity;
 
-public enum TypeProfil {
+public enum Role {
     ADMIN,
     PROFESSIONNELDESANTE,
     AGENTADMINISTRATIF
