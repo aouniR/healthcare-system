@@ -15,7 +15,6 @@ import jakarta.persistence.*;
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name="notificationID")
     private UUID id;
     private UUID userId;
     private String message;
