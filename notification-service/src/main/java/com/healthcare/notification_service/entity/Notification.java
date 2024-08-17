@@ -17,6 +17,7 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private UUID userId;
+    private String key;
     private String message;
     @CreationTimestamp
     private LocalDateTime creationTimestamp;

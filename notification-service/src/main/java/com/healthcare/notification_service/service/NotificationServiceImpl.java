@@ -1,6 +1,7 @@
 package com.healthcare.notification_service.service;
 
 import com.healthcare.notification_service.entity.Notification;
+import com.healthcare.notification_service.dto.UserDto;
 import com.healthcare.notification_service.request.SendNotificationRequest;
 import com.healthcare.notification_service.repository.NotificationRepository;
 
@@ -16,19 +17,15 @@ public class NotificationServiceImpl implements NotificationService {
     
     private final NotificationRepository notificationRepository;
 
-
     @Override
-    public Notification getNotificationById(UUID id) {
-        return notificationRepository.findById(id).orElse(null);
-    }
+    public void saveNotification(String key, UserDto message){
 
-    @Override
-    public void saveNotification(SendNotificationRequest request) {
         var notification = Notification.builder()
-                                        .id(UUID.randomUUID())
-                                        .userId(request.getUserId())
-                                        .message(request.getMessage())
-                                        .build();
+                                       .id(UUID.randomUUID())
+                                       .userId(message.getUserId())
+                                       .key(key)
+                                       .message(message)
+                                       .build();
         notificationRepository.save(notification);
     }
 

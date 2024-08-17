@@ -1,6 +1,7 @@
 package com.healthcare.user_service.kafka;
 
 import com.healthcare.user_service.entity.User;
+import com.healthcare.user_service.dto.AuthUserDto;
 import lombok.RequiredArgsConstructor;
 import java.util.UUID;
 
@@ -15,18 +16,34 @@ public class UserEventProducer {
     @Value("${kafka.topic.user-events}")
     private String userEventsTopic;
 
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final KafkaTemplate<String, AuthUserDto> kafkaTemplate;
 
     public void sendUserCreatedEvent(User user) {
-        kafkaTemplate.send(userEventsTopic, "USER_CREATED", user);
+        AuthUserDto userDTO = new AuthUserDto();
+        userDTO.setId(user.getId());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setPassword("$$$$$");
+        userDTO.setRole(user.getRole());
+        userDTO.setCreationTimestamp(user.getCreationTimestamp());
+        userDTO.setUpdateTimestamp(user.getUpdateTimestamp());
+        kafkaTemplate.send(userEventsTopic, "USER_CREATED", userDTO);
     }
 
     public void sendUserDeletedEvent(UUID userId) {
-        kafkaTemplate.send(userEventsTopic, "USER_DELETED", userId);
+        kafkaTemplate.send(userEventsTopic, "USER_DELETED", new AuthUserDto(userId));
     }
 
-    public void sendUserUpdatedEvent(User userPrev, User userUp) {
-        kafkaTemplate.send(userEventsTopic, "USER_UPDATED", userPrev, userUp);
+    public void sendUserUpdatedEvent(User userUp) {
+        AuthUserDto userDTO = new AuthUserDto();
+        userDTO.setId(userUp.getId());
+        userDTO.setUsername(userUp.getUsername());
+        userDTO.setEmail(userUp.getEmail());
+        userDTO.setPassword("$$$$$");
+        userDTO.setRole(userUp.getRole());
+        userDTO.setCreationTimestamp(userUp.getCreationTimestamp());
+        userDTO.setUpdateTimestamp(userUp.getUpdateTimestamp());
+        kafkaTemplate.send(userEventsTopic, "USER_UPDATED", userDTO);
     }
 }
 

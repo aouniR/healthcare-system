@@ -52,17 +52,9 @@ public class UserServiceImpl implements UserService {
     public User updateUserById(UserUpdateRequest request) {
         User existingUser = userRepository.findById(request.getId())
             .orElseThrow(() -> new NotFoundException("User not found"));
-    
-        User originalUser = User.builder()
-            .username(existingUser.getUsername())
-            .password(existingUser.getPassword())
-            .email(existingUser.getEmail())
-            .role(existingUser.getRole())
-            .build();
-    
         modelMapper.map(request, existingUser);
         User updatedUser = userRepository.save(existingUser);
-        userEventProducer.sendUserUpdatedEvent(originalUser, updatedUser);
+        userEventProducer.sendUserUpdatedEvent(updatedUser);
         return updatedUser;
     }
     
