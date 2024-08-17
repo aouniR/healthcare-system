@@ -6,7 +6,7 @@ import com.healthcare.notification_service.service.NotificationServiceImpl;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/notifications")
+@PreAuthorize("hasRole('ADMIN')")
 @RequiredArgsConstructor
 public class NotificationController {
 

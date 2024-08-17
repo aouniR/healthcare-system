@@ -11,3 +11,5 @@ public class SendNotificationRequest {
     private UUID userId;
     private String message;
 }
+
+

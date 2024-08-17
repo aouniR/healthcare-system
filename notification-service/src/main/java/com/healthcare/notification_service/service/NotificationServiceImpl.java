@@ -18,11 +18,6 @@ public class NotificationServiceImpl implements NotificationService {
 
 
     @Override
-    public List<Notification> getAllNotifications() {
-        return notificationRepository.findAll();
-    }
-
-    @Override
     public Notification getNotificationById(UUID id) {
         return notificationRepository.findById(id).orElse(null);
     }

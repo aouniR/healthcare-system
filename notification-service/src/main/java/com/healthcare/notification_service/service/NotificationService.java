@@ -7,7 +7,6 @@ import com.healthcare.notification_service.entity.Notification;
 import com.healthcare.notification_service.request.SendNotificationRequest;
 
 public interface NotificationService {
-    List<Notification> getAllNotifications();
     Notification getNotificationById(UUID id);
     void saveNotification(SendNotificationRequest request);
     void deleteNotification(UUID id);
