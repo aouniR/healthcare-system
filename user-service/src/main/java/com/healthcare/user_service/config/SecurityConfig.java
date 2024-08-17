@@ -1,7 +1,6 @@
 package com.healthcare.user_service.config;
 
 import com.healthcare.user_service.jwt.JwtAuthenticationFilter;
-import com.healthcare.user_service.jwt.InternalRequestFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
@@ -35,13 +34,11 @@ public class SecurityConfig {
                 .requestMatchers("/swagger-resources/**",
                                         "/swagger-ui.html/**",
                                         "/swagger-ui/**",
-                                        "/api-docs/**",
-                                        "/internal/**").permitAll()
+                                        "/api-docs/**").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-            .addFilterBefore(new InternalRequestFilter(), JwtAuthenticationFilter.class)
             .httpBasic(Customizer.withDefaults())
             .build();
     }

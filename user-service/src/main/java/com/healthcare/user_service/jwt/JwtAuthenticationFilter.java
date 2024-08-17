@@ -10,39 +10,64 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.Collections;
-
+import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+    private static final String INTERNAL_SERVICE_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
 
     @Override
     protected void doFilterInternal(@NonNull jakarta.servlet.http.HttpServletRequest request,
             @NonNull jakarta.servlet.http.HttpServletResponse response, @NonNull jakarta.servlet.FilterChain filterChain)
             throws jakarta.servlet.ServletException, IOException {
         try {
-            String token = request.getHeader("Authorization");
+            String requestURI = request.getRequestURI();
 
-            if (StringUtils.hasText(token) && token.startsWith("Bearer ")) {
-                Claims claims = jwtUtil.getClaims(token.substring(7));
-
-                SimpleGrantedAuthority authority = new SimpleGrantedAuthority(claims.getIssuer());
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        claims.getSubject(), null, Collections.singleton(authority));
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+            if (requestURI.startsWith("/internal")) {
+                String internalToken = request.getHeader("Internal-Service-Token");
+                if (INTERNAL_SERVICE_TOKEN.equals(internalToken)) {
+                    SecurityContextHolder.getContext().setAuthentication(
+                            new UsernamePasswordAuthenticationToken("internal", null, Collections.emptyList())
+                    );
+                    filterChain.doFilter(request, response);
+                    return;
+                } else {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().write("Unauthorized: Invalid Internal Service Token");
+                    return;
+                }
             }
 
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            throw new UnsupportedOperationException("Unimplemented method 'doFilterInternal'");
-        }
-        filterChain.doFilter(request, response);
-    }
+            String token = request.getHeader("Authorization");
+            if (token != null && token.startsWith("Bearer ")) {
+                token = token.substring(7);
+                if (StringUtils.hasText(token)) {
+                    Claims claims = jwtUtil.getClaims(token);
 
+                    if (claims != null) {
+                        List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(claims.getIssuer()));
+                        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                                claims.getSubject(), null, authorities
+                        );
+                        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
+                }
+            }
+
+            filterChain.doFilter(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("Internal Server Error: " + e.getMessage());
+        }
+    }
 }
