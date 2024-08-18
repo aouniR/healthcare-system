@@ -2,9 +2,9 @@ package com.healthcare.notification_service.service;
 
 import com.healthcare.notification_service.entity.Notification;
 import com.healthcare.notification_service.dto.UserDto;
-import com.healthcare.notification_service.request.SendNotificationRequest;
 import com.healthcare.notification_service.repository.NotificationRepository;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +19,19 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void saveNotification(String key, UserDto message){
+        ObjectMapper objectMapper = new ObjectMapper();
+        String messageJson;
+        try {
+            messageJson = objectMapper.writeValueAsString(message);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to serialize UserDto", e);
+        }
 
         var notification = Notification.builder()
                                        .id(UUID.randomUUID())
-                                       .userId(message.getUserId())
+                                       .userId(message.getId())
                                        .key(key)
-                                       .message(message)
+                                       .message(messageJson)
                                        .build();
         notificationRepository.save(notification);
     }

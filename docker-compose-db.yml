@@ -8,3 +8,13 @@ services:
       POSTGRES_PASSWORD: ${USER_DB_PASSWORD}
     ports:
       - "5432:5432"
+
+  notification-service-db:
+    image: postgres:14
+    container_name: notification-service-db
+    environment:
+      POSTGRES_DB: notificationdb
+      POSTGRES_USER: notification-service
+      POSTGRES_PASSWORD: ${NOTIFICATION_DB_PASSWORD}
+    ports:
+      - "5433:5432"

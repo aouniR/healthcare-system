@@ -10,7 +10,7 @@ public class UserDto {
     private String username;
     private String email;
     private String password;
-    private string role; 
+    private String role; 
     private LocalDateTime creationTimestamp;
     private LocalDateTime updateTimestamp; 
 }
