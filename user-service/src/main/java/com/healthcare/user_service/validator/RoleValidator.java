@@ -4,23 +4,25 @@ import com.healthcare.user_service.entity.Role;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class RoleValidator implements ConstraintValidator<ValidRole, Role> {
+public class RoleValidator implements ConstraintValidator<ValidRole, String> {
 
     @Override
     public void initialize(ValidRole constraintAnnotation) {
     }
 
     @Override
-    public boolean isValid(Role role, ConstraintValidatorContext context) {
-        if (role == null) {
+    public boolean isValid(String roleStr, ConstraintValidatorContext context) {
+        if (roleStr == null || roleStr.isEmpty()) {
             return false; 
         }
-        for (Role r : Role.values()) {
-            if (r.equals(role)) {
-                return true;
-            }
+
+        try {
+            Role.valueOf(roleStr.toUpperCase());
+            return true;
+        } catch (IllegalArgumentException e) {
+            return false;
         }
-        return false;
     }
+    
 }
 

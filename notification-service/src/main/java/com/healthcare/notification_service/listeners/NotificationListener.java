@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class NotificationListener {
     private final NotificationServiceImpl notificationServiceImpl;
 
-    @KafkaListener(topics = "${kafka.topic.user-events}", groupId = "${spring.kafka.consumer.group-id}")
+    @KafkaListener(topics = "${kafka.topic.user-events}", groupId = "${kafka.consumer.group-id}")
     public void handleUserEvent(String key, UserDto message) {
         if ("USER_CREATED".equals(key)) {
             notificationServiceImpl.saveNotification(key, message);

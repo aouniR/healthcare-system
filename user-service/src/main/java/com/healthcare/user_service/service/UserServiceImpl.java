@@ -2,14 +2,14 @@ package com.healthcare.user_service.service;
 
 
 import com.healthcare.user_service.entity.User;
+import com.healthcare.user_service.entity.Role;
 import com.healthcare.user_service.exception.NotFoundException;
 import com.healthcare.user_service.repository.UserRepository;
-import com.healthcare.user_service.request.RegisterRequest;
 import com.healthcare.user_service.request.UserUpdateRequest;
+import com.healthcare.user_service.request.RegisterRequest;
 import com.healthcare.user_service.kafka.UserEventProducer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,24 +57,28 @@ public class UserServiceImpl implements UserService {
         userEventProducer.sendUserUpdatedEvent(updatedUser);
         return updatedUser;
     }
-    
+
+    private Role convertToRoleEnum(String roleStr) {
+        try {
+            return Role.valueOf(roleStr.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid role value: " + roleStr);
+        }
+    }
 
     @Override
     public User saveUser(RegisterRequest request) {
+        Role role = convertToRoleEnum(request.getRole());
         User toSave = User.builder()
             .username(request.getUsername())
             .password(passwordEncoder.encode(request.getPassword()))
             .email(request.getEmail())
-            .role(request.getRole())
+            .role(role)
             .build();
     
         User savedUser = userRepository.save(toSave);
     
-        if (savedUser != null) {
-            userEventProducer.sendUserCreatedEvent(savedUser);
-        } else {
-            throw new RuntimeException("Failed to save user");
-        }
+        userEventProducer.sendUserCreatedEvent(savedUser);
         return savedUser;
     }
     

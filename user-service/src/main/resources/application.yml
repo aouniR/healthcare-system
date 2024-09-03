@@ -5,3 +5,6 @@ spring:
     config:
       uri: http://localhost:8888
 
+logging: 
+  level:
+    com.healthcare.user_service.jwt.JwtAuthenticationFilter: INFO

@@ -9,7 +9,6 @@ import com.healthcare.user_service.service.UserServiceImpl;
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,14 +28,12 @@ public class AdminUserController {
     }
 
     @GetMapping("/users/getAllUsers")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserDto>> getAllUsers() {
         return ResponseEntity.ok(userServiceImpl.getAllUsers().stream()
         .map(user -> modelMapper.map(user, UserDto.class)).toList());
     }
 
     @GetMapping("/users/getUserById/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDto> getUserById(@PathVariable UUID id) {
         return ResponseEntity.ok(modelMapper.map(userServiceImpl.getUserById(id), UserDto.class));
     }
@@ -52,20 +49,17 @@ public class AdminUserController {
     }
 
     @PutMapping("/users/update/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDto> updateUserById(@Valid @RequestPart UserUpdateRequest request) {
         return ResponseEntity.ok(modelMapper.map(userServiceImpl.updateUserById(request), UserDto.class));
     }
 
     @PostMapping("/internal/users/save")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.ok(modelMapper.map(userServiceImpl.saveUser(request), UserDto.class));
     }
 
 
     @DeleteMapping("/users/deleteUserById/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteUserById(@Valid @RequestPart UserUpdateRequest request) {
         userServiceImpl.deleteUserById(request);
         return ResponseEntity.noContent().build();

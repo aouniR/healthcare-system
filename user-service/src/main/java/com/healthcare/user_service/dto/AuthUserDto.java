@@ -1,11 +1,16 @@
 package com.healthcare.user_service.dto;
 
+import com.healthcare.user_service.entity.Role;
 import java.util.UUID;
 import java.time.LocalDateTime;
-import com.healthcare.user_service.entity.Role;
+
 import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AuthUserDto {
     private UUID id;
     private String username;

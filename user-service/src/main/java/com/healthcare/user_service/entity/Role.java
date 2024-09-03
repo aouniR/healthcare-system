@@ -5,3 +5,5 @@ public enum Role {
     PROFESSIONNELDESANTE,
     AGENTADMINISTRATIF
 }
+
+

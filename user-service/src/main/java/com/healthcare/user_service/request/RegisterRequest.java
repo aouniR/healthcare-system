@@ -1,7 +1,5 @@
 package com.healthcare.user_service.request;
 
-
-import com.healthcare.user_service.entity.Role;
 import com.healthcare.user_service.validator.ValidRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -21,5 +19,5 @@ public class RegisterRequest {
     @Email(message = "Email should be valid")
     private String email;
     @ValidRole(message = "Role is required, it must be 'ADMIN', 'PROFESSIONNELDESANTE', or 'AGENTADMINISTRATIF'")
-    private Role role ;
+    private String role ;
 }

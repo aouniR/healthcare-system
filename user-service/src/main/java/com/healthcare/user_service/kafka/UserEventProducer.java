@@ -31,7 +31,9 @@ public class UserEventProducer {
     }
 
     public void sendUserDeletedEvent(UUID userId) {
-        kafkaTemplate.send(userEventsTopic, "USER_DELETED", new AuthUserDto(userId));
+        AuthUserDto userDTO = new AuthUserDto();
+        userDTO.setId(userId);
+        kafkaTemplate.send(userEventsTopic, "USER_DELETED", userDTO);
     }
 
     public void sendUserUpdatedEvent(User userUp) {
