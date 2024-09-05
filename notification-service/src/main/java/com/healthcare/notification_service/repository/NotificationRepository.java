@@ -10,5 +10,6 @@ import com.healthcare.notification_service.entity.Notification;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, UUID>{
     List<Notification> findAllByUserIdOrderByCreationTimestampDesc(UUID id);
+    List<Notification> findAllByOrderByCreationTimestampDesc();
 }
 

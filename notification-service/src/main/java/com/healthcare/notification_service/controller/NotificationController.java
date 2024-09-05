@@ -22,4 +22,9 @@ public class NotificationController {
     public ResponseEntity<List<Notification>> getAllByUserId(@PathVariable UUID userId) {
         return ResponseEntity.ok(notificationServiceImpl.getAllNotificationsByUserId(userId));
     }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<Notification>> getAll() {
+        return ResponseEntity.ok(notificationServiceImpl.getAllNotifications());
+    }
 }

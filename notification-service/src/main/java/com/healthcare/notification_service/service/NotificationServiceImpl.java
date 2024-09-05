@@ -45,5 +45,10 @@ public class NotificationServiceImpl implements NotificationService {
     public List<Notification> getAllNotificationsByUserId(UUID id) {
         return notificationRepository.findAllByUserIdOrderByCreationTimestampDesc(id);
     }
+
+    @Override
+    public List<Notification> getAllNotifications() {
+        return notificationRepository.findAllByOrderByCreationTimestampDesc();
+    }
 }
 

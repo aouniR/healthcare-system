@@ -9,5 +9,6 @@ public interface NotificationService {
     void saveNotification(String key, UserDto message);
     public void deleteNotification(UUID id);
     public List<Notification> getAllNotificationsByUserId(UUID id);
+    public List<Notification> getAllNotifications();
 }
 
