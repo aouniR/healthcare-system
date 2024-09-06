@@ -9,4 +9,3 @@ spring:
           searchPaths: '{application}'
 server:
   port: 8888
-

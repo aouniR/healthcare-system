@@ -9,6 +9,7 @@ import com.healthcare.user_service.service.UserServiceImpl;
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,7 @@ public class AdminUserController {
     }
 
     @GetMapping("/users/getAllUsers")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserDto>> getAllUsers() {
         return ResponseEntity.ok(userServiceImpl.getAllUsers().stream()
         .map(user -> modelMapper.map(user, UserDto.class)).toList());
