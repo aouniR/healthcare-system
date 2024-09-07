@@ -6,6 +6,8 @@ import com.healthcare.notification_service.service.NotificationServiceImpl;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -24,6 +26,7 @@ public class NotificationController {
     }
 
     @GetMapping("/getAll")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Notification>> getAll() {
         return ResponseEntity.ok(notificationServiceImpl.getAllNotifications());
     }
