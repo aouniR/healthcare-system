@@ -65,10 +65,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         logger.info("Roles in JWT: {}", claims.get("roles"));
                         List<String> roles = jwtUtil.getRolesFromClaims(claims);
                         Collection<GrantedAuthority> authorities = roles.stream()
-                                .map(role -> new SimpleGrantedAuthority("ROLE_" + role)) 
+                                .map(SimpleGrantedAuthority::new) 
                                 .collect(Collectors.toList());
                                 authentication = new UsernamePasswordAuthenticationToken(
-                                    claims.getSubject(), null, authorities
+                                    claims.get("userId"), null, authorities
                             );
                             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                             SecurityContextHolder.getContext().setAuthentication(authentication);

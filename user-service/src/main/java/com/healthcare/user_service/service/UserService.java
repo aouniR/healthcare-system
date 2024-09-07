@@ -11,10 +11,9 @@ import java.util.UUID;
 public interface UserService {
     List<User> getAllUsers();
     User getUserById(UUID id);
-    User getUserByEmail(String email);
     User getUserByUsername(String username);
-    User updateUserById(UserUpdateRequest request);
+    User updateUserById(UUID id,UserUpdateRequest request);
     User saveUser(RegisterRequest request);
-    void deleteUserById(UserUpdateRequest request);
+    void deleteUserById(UUID id);
 }
 

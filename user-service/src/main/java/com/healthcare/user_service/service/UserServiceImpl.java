@@ -37,20 +37,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("User not found"));
-    }
-
-    @Override
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
     @Override
-    public User updateUserById(UserUpdateRequest request) {
-        User existingUser = userRepository.findById(request.getId())
+    public User updateUserById(UUID id, UserUpdateRequest request) {
+        User existingUser = userRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("User not found"));
         modelMapper.map(request, existingUser);
         User updatedUser = userRepository.save(existingUser);
@@ -84,8 +78,8 @@ public class UserServiceImpl implements UserService {
     
 
     @Override
-    public void deleteUserById(UserUpdateRequest request) {
-        User toDelete = userRepository.findById(request.getId())
+    public void deleteUserById(UUID id) {
+        User toDelete = userRepository.findById(id)
             .orElseThrow(() -> new NotFoundException("User not found"));
         userRepository.delete(toDelete);
         userEventProducer.sendUserDeletedEvent(toDelete.getId());

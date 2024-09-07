@@ -4,6 +4,7 @@ import com.healthcare.user_service.request.RegisterRequest;
 import com.healthcare.user_service.request.UserUpdateRequest;
 import com.healthcare.user_service.dto.AuthUserDto;
 import com.healthcare.user_service.dto.UserDto;
+import com.healthcare.user_service.entity.User;
 import com.healthcare.user_service.service.UserServiceImpl;
 
 import jakarta.validation.Valid;
@@ -36,13 +37,9 @@ public class AdminUserController {
     }
 
     @GetMapping("/users/getUserById/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDto> getUserById(@PathVariable UUID id) {
         return ResponseEntity.ok(modelMapper.map(userServiceImpl.getUserById(id), UserDto.class));
-    }
-
-    @GetMapping("/users/getUserByEmail/{email}")
-    public ResponseEntity<UserDto> getUserByEmail(@PathVariable String email) {
-        return ResponseEntity.ok(modelMapper.map(userServiceImpl.getUserByEmail(email), UserDto.class));
     }
 
     @GetMapping("/internal/users/getUserByUsername/{username}")
@@ -50,20 +47,22 @@ public class AdminUserController {
         return ResponseEntity.ok(modelMapper.map(userServiceImpl.getUserByUsername(username), AuthUserDto.class));
     }
 
-    @PutMapping("/users/update/{id}")
-    public ResponseEntity<UserDto> updateUserById(@Valid @RequestPart UserUpdateRequest request) {
-        return ResponseEntity.ok(modelMapper.map(userServiceImpl.updateUserById(request), UserDto.class));
-    }
-
     @PostMapping("/internal/users/save")
     public ResponseEntity<UserDto> createUser(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.ok(modelMapper.map(userServiceImpl.saveUser(request), UserDto.class));
     }
-
+    @PutMapping("/users/updateByAdmin/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<User> updateUserById(@PathVariable UUID id, @Valid @RequestBody UserUpdateRequest request) {
+        return ResponseEntity.ok(userServiceImpl.updateUserById(id,request));
+    }
 
     @DeleteMapping("/users/deleteUserById/{id}")
-    public ResponseEntity<Void> deleteUserById(@Valid @RequestPart UserUpdateRequest request) {
-        userServiceImpl.deleteUserById(request);
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteUserById(@PathVariable UUID id) {
+        userServiceImpl.deleteUserById(id);
         return ResponseEntity.noContent().build();
     }
+
+
 }
