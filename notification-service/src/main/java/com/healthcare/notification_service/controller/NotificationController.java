@@ -20,8 +20,14 @@ public class NotificationController {
 
     private final NotificationServiceImpl notificationServiceImpl;
 
-    @GetMapping("/getAllByUserId/{userId}")
+    @GetMapping("/getMyNotfByUserId/{userId}")
     @PreAuthorize("@securityService.isOwner(#userId)")
+    public ResponseEntity<List<Notification>> getMyNotfByUserId(@PathVariable UUID userId) {
+        return ResponseEntity.ok(notificationServiceImpl.getAllNotificationsByUserId(userId));
+    }
+
+    @GetMapping("/getAllByUserId/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Notification>> getAllByUserId(@PathVariable UUID userId) {
         return ResponseEntity.ok(notificationServiceImpl.getAllNotificationsByUserId(userId));
     }
