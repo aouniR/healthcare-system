@@ -18,3 +18,13 @@ services:
       POSTGRES_PASSWORD: ${NOTIFICATION_DB_PASSWORD}
     ports:
       - "5433:5432"
+
+  metamodel-service-db:
+    image: postgres:14
+    container_name: metamodel-service-db
+    environment:
+      POSTGRES_DB: metamodeldb
+      POSTGRES_USER: metamodel-service
+      POSTGRES_PASSWORD: ${METAMODELE_DB_PASSWORD}
+    ports:
+      - "5434:5432"

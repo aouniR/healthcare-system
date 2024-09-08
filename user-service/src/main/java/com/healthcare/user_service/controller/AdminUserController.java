@@ -8,26 +8,22 @@ import com.healthcare.user_service.entity.User;
 import com.healthcare.user_service.service.UserServiceImpl;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequiredArgsConstructor
 public class AdminUserController {
 
     private final UserServiceImpl userServiceImpl;
     private final ModelMapper modelMapper;
 
-    @Autowired
-    public AdminUserController(UserServiceImpl userServiceImpl, ModelMapper modelMapper) {
-        this.userServiceImpl = userServiceImpl;
-        this.modelMapper = modelMapper;
-    }
 
     @GetMapping("/users/getAllUsers")
     @PreAuthorize("hasRole('ADMIN')")

@@ -5,7 +5,8 @@ import java.util.UUID;
 import com.healthcare.notification_service.entity.Notification;
 
 public interface NotificationService {
-    void saveNotification(String key, String message);
+    void saveUserNotification(String key, String message);
+    void saveMetalModelNotification(String key, String message);
     public void deleteNotification(UUID id);
     public List<Notification> getAllNotificationsByUserId(UUID id);
     public List<Notification> getAllNotifications();

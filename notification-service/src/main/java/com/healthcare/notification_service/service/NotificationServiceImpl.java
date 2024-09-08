@@ -2,6 +2,7 @@ package com.healthcare.notification_service.service;
 
 import com.healthcare.notification_service.entity.Notification;
 import com.healthcare.notification_service.jwt.JwtAuthenticationFilter;
+import com.healthcare.notification_service.dto.MetaModelDto;
 import com.healthcare.notification_service.dto.UserDto;
 import com.healthcare.notification_service.repository.NotificationRepository;
 
@@ -34,13 +35,31 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public void saveNotification(String key, String message){
+    public void saveUserNotification(String key, String message){
 
         try {
             UserDto user = objectMapper.readValue(message, UserDto.class);
             var notification = Notification.builder()
                                             .id(UUID.randomUUID())
                                             .userId(user.getId())
+                                            .key(key)
+                                            .message(message)
+                                            .build();
+            notificationRepository.save(notification);
+            log.info("Notification saved: {}", notification);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save notification", e);
+        }
+    }
+
+    @Override
+    public void saveMetalModelNotification(String key, String message){
+
+        try {
+            MetaModelDto metaModel = objectMapper.readValue(message, MetaModelDto.class);
+            var notification = Notification.builder()
+                                            .id(UUID.randomUUID())
+                                            .userId(metaModel.getCreatorId())
                                             .key(key)
                                             .message(message)
                                             .build();
