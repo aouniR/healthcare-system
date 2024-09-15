@@ -2,6 +2,7 @@ package com.healthcare.metamodel_service.config;
 
 import com.healthcare.metamodel_service.jwt.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.lang.NonNull;
@@ -72,6 +73,11 @@ public class AuthConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
     }
 }
 

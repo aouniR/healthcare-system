@@ -23,7 +23,7 @@ public class MetaModelController {
     private final MetaModelServiceImpl metaModelServiceImpl;
 
 
-    @GetMapping("/createMetaModel")
+    @PostMapping("/createMetaModel")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MetaModel> createMetaModel( @Valid @RequestBody RegisterRequest request,  Authentication authentication) {
         UUID userId = UUID.fromString((String) authentication.getPrincipal());
