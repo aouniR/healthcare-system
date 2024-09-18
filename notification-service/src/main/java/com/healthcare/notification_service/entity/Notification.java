@@ -22,6 +22,7 @@ public class Notification implements Serializable{
     private UUID id;
     private UUID userId;
     private String key;
+    @Column(name = "message", columnDefinition = "TEXT")
     private String message;
     @CreationTimestamp
     private LocalDateTime creationTimestamp;

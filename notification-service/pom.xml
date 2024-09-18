@@ -158,7 +158,9 @@
                         </configuration>
                 <executions>
                     <execution>
+						<id>clean-and-migrate</id>
                         <goals>
+						 	<goal>clean</goal>
                             <goal>migrate</goal>
                         </goals>
                         <phase>verify</phase>
