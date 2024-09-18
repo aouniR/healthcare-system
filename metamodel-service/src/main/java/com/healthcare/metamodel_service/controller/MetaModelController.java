@@ -2,6 +2,7 @@ package com.healthcare.metamodel_service.controller;
 
 import com.healthcare.metamodel_service.entity.MetaModel;
 import com.healthcare.metamodel_service.request.RegisterRequest;
+import com.healthcare.metamodel_service.request.UpdateRequest;
 import com.healthcare.metamodel_service.service.MetaModelServiceImpl;
 import org.springframework.security.core.Authentication;
 
@@ -44,7 +45,7 @@ public class MetaModelController {
 
     @PutMapping("/updateMetaModelById/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<MetaModel> updateMetaModelById(@PathVariable UUID id, @Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<MetaModel> updateMetaModelById(@PathVariable UUID id, @Valid @RequestBody UpdateRequest request) {
         return ResponseEntity.ok(metaModelServiceImpl.updateMetaModelById(id,request));
     }
 

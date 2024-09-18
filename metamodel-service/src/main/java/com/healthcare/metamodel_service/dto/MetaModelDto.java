@@ -1,8 +1,11 @@
 package com.healthcare.metamodel_service.dto;
 
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.healthcare.metamodel_service.entity.TypeMetaModel;
+
 import lombok.Data;
 
 @Data
@@ -10,8 +13,11 @@ import lombok.Data;
 public class MetaModelDto {
     private UUID id;
     private String description;
+    private JsonNode fields;
+    private TypeMetaModel type;
     private UUID creatorId;
-    private List<UUID> composantsIds;
+    private LocalDateTime creationTimestamp;
+    private LocalDateTime updateTimestamp;
 }
 
 
