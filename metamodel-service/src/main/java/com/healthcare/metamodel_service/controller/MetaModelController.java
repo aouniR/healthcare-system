@@ -1,8 +1,10 @@
 package com.healthcare.metamodel_service.controller;
 
 import com.healthcare.metamodel_service.entity.MetaModel;
+import com.healthcare.metamodel_service.entity.TypeMetaModel;
 import com.healthcare.metamodel_service.request.RegisterRequest;
-import com.healthcare.metamodel_service.request.UpdateRequest;
+import com.healthcare.metamodel_service.request.AddFieldsRequest;
+import com.healthcare.metamodel_service.request.DeleteFieldsRequest;
 import com.healthcare.metamodel_service.service.MetaModelServiceImpl;
 import org.springframework.security.core.Authentication;
 
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.web.bind.annotation.*;
@@ -32,21 +35,30 @@ public class MetaModelController {
     }
 
     @GetMapping("/getAllMetaModels")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<MetaModel>> getAllMetaModels() {
         return ResponseEntity.ok(metaModelServiceImpl.getAllMetaModels());
     }
 
     @GetMapping("/getMetaModelById/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MetaModel> getMetaModelById(@PathVariable UUID id) {
         return ResponseEntity.ok(metaModelServiceImpl.getMetaModelById(id));
     }
 
-    @PutMapping("/updateMetaModelById/{id}")
+    @GetMapping("/getMetaModelByType/{type}")
+    public ResponseEntity<Optional<List<MetaModel>>> getMetaModelByType(@PathVariable TypeMetaModel type) {
+        return ResponseEntity.ok(metaModelServiceImpl.getMetaModelByType(type));
+    }
+
+    @PutMapping("/addFieldsToMetaModelById/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<MetaModel> updateMetaModelById(@PathVariable UUID id, @Valid @RequestBody UpdateRequest request) {
-        return ResponseEntity.ok(metaModelServiceImpl.updateMetaModelById(id,request));
+    public ResponseEntity<MetaModel> addFieldsToMetaModelById(@PathVariable UUID id, @Valid @RequestBody AddFieldsRequest request) {
+        return ResponseEntity.ok(metaModelServiceImpl.addFieldsToMetaModelById(id,request));
+    }
+
+    @DeleteMapping("/deleteFieldFromMetaModelById/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<MetaModel> deleteFieldFromMetaModelById(@PathVariable UUID id, @Valid @RequestBody DeleteFieldsRequest request) {
+        return ResponseEntity.ok(metaModelServiceImpl.deleteFieldFromMetaModelById(id,request));
     }
 
     @DeleteMapping("/deleteMetaModelById/{id}")
