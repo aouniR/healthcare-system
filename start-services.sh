@@ -1,103 +1,146 @@
 #!/bin/bash
 
 # Configuration
-SERVICES="eureka-server api-gateway config-server authentication-service user-service notification-service"
-PID_FILE="pids.txt"
-DOCKER_COMPOSE_FILE="docker-compose-db.yml"
+SERVICES="eureka-server config-server api-gateway authentication-service user-service notification-service metamodel-service"
+DB_COMPOSE_FILE="docker-compose-db.yml"
+SERVERS_COMPOSE_FILE="docker-compose-servers.yml"
+SERVICES_COMPOSE_FILE="docker-compose-services.yml"
+DOCKER_COMPOSE_TIMEOUT=60  
+DOCKER_SERVICE_NETWORK="healthcare-service-network"
+log_dir="$(pwd)/logs"
 
-# Function to start Docker Compose
-start_docker_containers() {
-    echo "Starting Docker containers..."
-    docker-compose -f $DOCKER_COMPOSE_FILE up -d
+# Function to start Docker Compose for a specific file
+start_docker_compose() {
+    local compose_file=$1
+    echo "Starting Docker Compose for $compose_file..."
+    docker-compose -f "$compose_file" up -d
     if [ $? -ne 0 ]; then
-        echo "Failed to start Docker containers. Exiting."
+        echo "Failed to start Docker containers from $compose_file. Exiting."
         exit 1
     fi
 }
 
-# Function to check if Docker containers are ready
+# Function to wait for Docker containers to be ready
 wait_for_docker_containers() {
-    echo "Waiting for Docker containers to be ready..."
-    sleep 10  # Initial wait to give containers time to start
+    local compose_file=$1
+    echo "Waiting for Docker containers from $compose_file to be ready..."
+    sleep 10  
 
-    while true; do
-        # Check if the containers are up
-        CONTAINER_STATUS=$(docker inspect -f '{{.State.Running}}' $(docker ps -q))
-        if [[ $CONTAINER_STATUS == *"true"* ]]; then
-            echo "All Docker containers are up and running."
-            break
+    local timeout=$DOCKER_COMPOSE_TIMEOUT
+    while [[ $timeout -gt 0 ]]; do
+        CONTAINER_STATUS=$(docker-compose -f "$compose_file" ps --filter "status=running" --quiet)
+        if [[ -n $CONTAINER_STATUS ]]; then
+            echo "All Docker containers from $compose_file are up and running."
+            return 0
         else
-            echo "Docker containers are not ready yet. Waiting..."
+            echo "Docker containers from $compose_file are not ready yet. Waiting..."
             sleep 5
+            timeout=$((timeout - 5))
         fi
     done
+
+    echo "Timeout waiting for Docker containers from $compose_file. Exiting."
+    exit 1
 }
 
-# Remove previous Log files
-remove_log_files(){
+# Remove previous log files
+remove_log_files() {
     echo "Removing previous log files ..."
-    for service in $SERVICES; do
-        LOG_FILE="${service}_service.log"
-        echo "Removing $LOG_FILE..."
-        if [ -f $LOG_FILE ]; then
-            rm -f $LOG_FILE
-            echo "$LOG_FILE removed."
-        else
-            echo "$LOG_FILE does not exist."
-        fi
-    done
+    if [ -d "$log_dir" ]; then
+        rm -rf "$log_dir"
+        echo "All log files in $log_dir removed."
+    else
+        echo "$log_dir directory does not exist."
+    fi
 }
 
-# Function to start services
+# Function to start services (one by one with their own docker-compose file)
 start_services() {
-    rm -f $PID_FILE
-
+    local compose_file=$1
+    echo "Starting services from $compose_file ..."
+    mkdir -p "$log_dir"
     for service in $SERVICES; do
-        LOG_FILE="${service}_service.log"
-        echo "Building and running $service..."
-        cd ./$service || { echo "Directory $service not found. Exiting."; exit 1; }
-        mvn clean install > ../$LOG_FILE 2>&1
-        mvn spring-boot:run >> ../$LOG_FILE 2>&1 &
-        SERVICE_PID=$!
-        echo "$SERVICE_PID" >> ../$PID_FILE
-        cd - || { echo "Failed to return to the root directory. Exiting."; exit 1; }
-        echo "$service started with PID $SERVICE_PID. Logging to $LOG_FILE."
+        LOG_FILE="$log_dir/${service}_service.log"
+        echo "Starting $service with Docker Compose..."
+
+        docker-compose -f "$compose_file" up -d "$service" > "$LOG_FILE" 2>&1
+
+        local timeout=$DOCKER_COMPOSE_TIMEOUT
+        while [[ $timeout -gt 0 ]]; do
+
+            if docker-compose -f "$compose_file" ps | grep "$service" | grep "Up"; then
+                echo "$service started successfully."
+                break
+            else
+                echo "The docker containers of $service are not ready yet. Waiting..."
+                sleep 5
+                timeout=$((timeout - 5))
+            fi
+
+            if [[ $timeout -le 0 ]]; then
+                echo "$service failed to start within the timeout period. Check the log: $LOG_FILE"
+                return 1
+            fi
+        done
     done
 
     echo "All services have been started."
 }
 
-# Function to stop services
-stop_services() {
-    if [[ -f $PID_FILE ]]; then
-        while IFS= read -r pid; do
-            echo "Stopping service with PID $pid..."
-            kill "$pid" || echo "Failed to stop service with PID $pid."
-        done < "$PID_FILE"
-        rm -f $PID_FILE
+# Function to check if a Docker network exists or create it if it doesn't
+check_or_create_network() {
+    local network_name=$1
+
+    if ! docker network inspect "$network_name" >/dev/null 2>&1; then
+        echo "Network $network_name does not exist. Creating..."
+        
+        docker network create "$network_name" 2>&1
+        if [ $? -ne 0 ]; then
+            echo "Failed to create network $network_name. Exiting."
+            echo "Error creating network: $(docker network create "$network_name" 2>&1)"
+            exit 1
+        else
+            echo "Network $network_name created successfully."
+        fi
+    else
+        echo "Network $network_name already exists."
     fi
 }
+
 
 # Function to stop Docker Compose containers
 stop_docker_containers() {
     echo "Stopping Docker containers..."
-    docker-compose -f $DOCKER_COMPOSE_FILE down
+    docker-compose -f "$DB_COMPOSE_FILE" down
+    docker-compose -f "$SERVERS_COMPOSE_FILE" down
+    docker-compose -f "$SERVICES_COMPOSE_FILE" down
+}
+
+# Remove Network
+remove_docker_network() {
+    echo "Removing Docker network..."
+    docker network remove "$DOCKER_SERVICE_NETWORK" 
 }
 
 # Trap SIGINT (Ctrl+C) to ensure services and containers are stopped when the script is interrupted
-trap 'stop_services; stop_docker_containers; exit' INT TERM
+trap 'stop_docker_containers; remove_docker_network; echo "Application has been stopped! Good Bye!"; exit' INT TERM
 
-# Start Docker containers
-start_docker_containers
+# Check if the network exists
+check_or_create_network "$DOCKER_SERVICE_NETWORK" 
 
-# Wait for Docker containers to be ready
-wait_for_docker_containers
+# Start database containers
+start_docker_compose "$DB_COMPOSE_FILE"
+wait_for_docker_containers "$DB_COMPOSE_FILE"
+
+# Start server containers
+start_docker_compose "$SERVERS_COMPOSE_FILE"
+wait_for_docker_containers "$SERVERS_COMPOSE_FILE"
 
 # Remove Log files
 remove_log_files
 
-# Start services
-start_services
+# Start service containers
+start_services "$SERVICES_COMPOSE_FILE" 
 
 # Wait for all services to be stopped manually
 while :; do

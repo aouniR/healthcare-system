@@ -6,8 +6,8 @@ services:
       - "9092:9092"
       - "9093:9093"
     volumes:
-      - "kafka_data:/apache/kafka/data"
-      - "kafka_metadata:/apache/kafka/metadata"
+      - "kafka_data:/var/lib/kafka/data"
+      - "kafka_metadata:/var/lib/kafka/logs"
     environment:
       KAFKA_NODE_ID: 1
       KAFKA_PROCESS_ROLES: broker,controller
@@ -21,6 +21,9 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_NUM_PARTITIONS: 3
+      KAFKA_RETENTION_MS: 604800000
+    networks:
+      - healthcare-service-network  
 
   kafka-ui:
     container_name: kafka-ui
@@ -31,9 +34,15 @@ services:
     environment:
       - KAFKA_CLUSTERS_0_NAME=local
       - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=broker:9092
+    networks:
+      - healthcare-service-network  
 
 volumes:
   kafka_data:
     driver: local
   kafka_metadata:
     driver: local
+
+networks:
+  healthcare-service-network:
+    external: true

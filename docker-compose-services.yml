@@ -1,0 +1,122 @@
+services:
+  eureka-server:
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+    image: eureka-server:latest
+    ports:
+      - "8761:8761"
+    container_name: eureka-server
+    restart: unless-stopped
+    networks:
+      - healthcare-service-network
+
+  config-server:
+    build:
+      context: ./config-server
+      dockerfile: Dockerfile
+    image: config-server:latest
+    ports:
+      - "8888:8888"
+    container_name: config-server
+    restart: unless-stopped
+    depends_on:
+      - eureka-server
+    links:
+      - eureka-server    
+    networks:
+      - healthcare-service-network
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    image: api-gateway:latest
+    ports:
+      - "8080:8080"
+    container_name: api-gateway
+    restart: unless-stopped
+    depends_on:
+      - eureka-server
+      - config-server
+    links:
+      - eureka-server
+      - config-server
+    networks:
+      - healthcare-service-network
+
+  authentication-service:
+    build:
+      context: ./authentication-service
+      dockerfile: Dockerfile
+    image: authentication-service:latest
+    ports:
+      - "8081:8081"
+    container_name: authentication-service
+    restart: unless-stopped
+    depends_on:
+      - eureka-server
+      - config-server
+    links:
+      - eureka-server
+      - config-server
+    networks:
+      - healthcare-service-network
+
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    image: user-service:latest
+    ports:
+      - "8082:8082"
+    container_name: user-service
+    restart: unless-stopped
+    depends_on:
+      - eureka-server
+      - config-server
+    links:
+      - eureka-server
+      - config-server
+    networks:
+      - healthcare-service-network
+
+  notification-service:
+    build:
+      context: ./notification-service
+      dockerfile: Dockerfile
+    image: notification-service:latest
+    ports:
+      - "8085:8085"
+    container_name: notification-service
+    restart: unless-stopped
+    depends_on:
+      - eureka-server
+      - config-server
+    links:
+      - eureka-server
+      - config-server
+    networks:
+      - healthcare-service-network  
+
+  metamodel-service:
+    build:
+      context: ./metamodel-service
+      dockerfile: Dockerfile
+    image: metamodel-service:latest
+    ports:
+      - "8083:8083"
+    container_name: metamodel-service
+    restart: unless-stopped
+    depends_on:
+      - eureka-server
+      - config-server
+    links:
+      - eureka-server
+      - config-server
+    networks:
+      - healthcare-service-network
+
+networks:
+  healthcare-service-network:
+    external: true

@@ -139,35 +139,59 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
-  <build>
+    <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <arguments>--spring.profiles.active=${spring.profiles.active}</arguments>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
-                <version>10.10.0</version>
-                        <configuration>
-                            <url>jdbc:postgresql://localhost:5433/notificationdb</url>
-                            <user>notification-service</user>
-                            <password>E8C7D%j9@#G5Z!2u8q&amp;1E8kLx9m^Wb7S</password>
-                            <cleanDisabled>false</cleanDisabled>
-                        </configuration>
+                <version>${flyway.version}</version>
+                <configuration>
+                    <url>${flyway.url}</url>
+                    <user>${flyway.user}</user>
+                    <password>${flyway.password}</password>
+                    <locations>
+                        <location>filesystem:src/main/resources/db/migration</location>
+                    </locations>
+                </configuration>
                 <executions>
                     <execution>
-						<id>clean-and-migrate</id>
                         <goals>
-						 	<goal>clean</goal>
                             <goal>migrate</goal>
                         </goals>
-                        <phase>verify</phase>
+                        <phase>none</phase>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
-  </build>
+    </build>
+        <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <spring.profiles.active>dev</spring.profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <id>stage</id>
+            <properties>
+                <spring.profiles.active>stage</spring.profiles.active>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>

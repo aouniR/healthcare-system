@@ -8,6 +8,10 @@ services:
       POSTGRES_PASSWORD: ${USER_DB_PASSWORD}
     ports:
       - "5432:5432"
+    networks:
+      - healthcare-service-network
+    volumes:
+      - user_service_db_data:/var/lib/postgresql/data
 
   notification-service-db:
     image: postgres:14
@@ -18,6 +22,10 @@ services:
       POSTGRES_PASSWORD: ${NOTIFICATION_DB_PASSWORD}
     ports:
       - "5433:5432"
+    networks:
+      - healthcare-service-network
+    volumes:
+      - notification_service_db_data:/var/lib/postgresql/data
 
   metamodel-service-db:
     image: postgres:14
@@ -28,3 +36,19 @@ services:
       POSTGRES_PASSWORD: ${METAMODELE_DB_PASSWORD}
     ports:
       - "5434:5432"
+    networks:
+      - healthcare-service-network
+    volumes:
+      - metamodel_service_db_data:/var/lib/postgresql/data
+
+networks:
+  healthcare-service-network:
+    external: true
+
+volumes:
+  user_service_db_data:
+      driver: local
+  notification_service_db_data:
+      driver: local
+  metamodel_service_db_data:
+      driver: local

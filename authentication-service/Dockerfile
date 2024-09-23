@@ -1,11 +1,12 @@
 # Stage 1: Build
 FROM maven:latest AS build
 WORKDIR /app
-COPY . .
-RUN mvn clean install
+COPY pom.xml .
+COPY src ./src
+RUN mvn clean install -DskipTests -Pstage
 
 # Stage 2: Run
-FROM openjdk:8u302-jre-slim-buster
+FROM openjdk:24-slim
 WORKDIR /app
 COPY --from=build /app/target/authentication-service-0.0.1-SNAPSHOT.jar authentication-service.jar
-ENTRYPOINT ["java", "-jar", "api-gateway.jar"]
+ENTRYPOINT ["java", "-Dspring.profiles.active=stage", "-jar", "authentication-service.jar"]
