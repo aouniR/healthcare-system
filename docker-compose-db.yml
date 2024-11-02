@@ -1,0 +1,96 @@
+services:
+  user-service-db:
+    image: postgres:14
+    container_name: user-service-db
+    environment:
+      POSTGRES_DB: userdb
+      POSTGRES_USER: user_service
+      POSTGRES_PASSWORD: ${USER_DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    networks:
+      - healthcare-service-network
+    volumes:
+      - user_service_db_data:/var/lib/postgresql/data
+
+  notification-service-db:
+    image: postgres:14
+    container_name: notification-service-db
+    environment:
+      POSTGRES_DB: notificationdb
+      POSTGRES_USER: notification-service
+      POSTGRES_PASSWORD: ${NOTIFICATION_DB_PASSWORD}
+    ports:
+      - "5433:5432"
+    networks:
+      - healthcare-service-network
+    volumes:
+      - notification_service_db_data:/var/lib/postgresql/data
+
+  metamodel-service-db:
+    image: postgres:14
+    container_name: metamodel-service-db
+    environment:
+      POSTGRES_DB: metamodeldb
+      POSTGRES_USER: metamodel-service
+      POSTGRES_PASSWORD: ${METAMODELE_DB_PASSWORD}
+    ports:
+      - "5434:5432"
+    networks:
+      - healthcare-service-network
+    volumes:
+      - metamodel_service_db_data:/var/lib/postgresql/data
+
+  medicalrecord-service-db:
+    image: mongo:latest
+    container_name: medicalrecord-service-db
+    hostname: medicalrecord-service-db
+    restart: always
+    env_file:
+      - .env
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    ports:
+      - "27018:27017"
+    networks:
+      - healthcare-service-network
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - medicalrecord_service_db-data:/data/db/
+      - medicalrecord_service_db-log:/var/log/mongodb/
+    command: ["mongod", "--verbose"] 
+
+  mongo-express:
+    image: mongo-express
+    container_name: mongo-express
+    restart: always
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_SERVER: 'medicalrecord-service-db'
+      ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_EXPRESS_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_EXPRESS_PASSWORD}
+    ports:
+      - "7777:8081"  
+    depends_on:
+      - medicalrecord-service-db
+    networks:
+      - healthcare-service-network
+
+networks:
+  healthcare-service-network:
+    external: true
+
+volumes:
+  user_service_db_data:
+      driver: local
+  notification_service_db_data:
+      driver: local
+  metamodel_service_db_data:
+      driver: local
+  medicalrecord_service_db-data:
+      driver: local
+  medicalrecord_service_db-log:
+      driver: local

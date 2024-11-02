@@ -1,0 +1,31 @@
+<div class="card">
+  <div class="card-body">
+    <div class="row mb-3 align-items-center">
+      <div class="col">
+        <div class="text-sm">Total Growth</div>
+      </div>
+      <div class="col-auto">
+        <ng-container *ngIf="(totalAgents !== null)&&(totalPatients !== null); else loading">
+          Total Agents : {{ totalAgents }}
+          Total Patients: {{ totalPatients }}
+        </ng-container>
+        
+        <ng-template #loading>
+          <div class="spinner-border text-secondary" role="status">
+            <span class="sr-only"></span>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+    <apx-chart
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [dataLabels]="chartOptions.dataLabels"
+      [plotOptions]="chartOptions.plotOptions"
+      [responsive]="chartOptions.responsive"
+      [xaxis]="chartOptions.xaxis"
+      [colors]="chartOptions.colors"
+      [tooltip]="chartOptions.tooltip"
+    ></apx-chart>
+  </div>
+</div>

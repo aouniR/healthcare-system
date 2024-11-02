@@ -1,0 +1,42 @@
+
+<div class="container mt-5">
+    <div class="card shadow">
+      <div class="card-header">
+        <h5 class="card-title">Notification Details</h5>
+      </div>
+      <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">ID: {{ notificationId }}</h6>
+        <div *ngIf="notification">
+          <p><strong>Key:</strong> {{ notification.key }}</p>
+          <p><strong>Created At:</strong> {{ notification.creationTimestamp | date:'medium' }}</p>
+          <p><strong>User ID:</strong> {{ notification.userId }}</p>
+          <hr>
+          <h6>Message Details:</h6>
+          <div *ngFor="let entry of parsedMessage()">
+            <div *ngIf="entry.value" class="row mb-2">
+              <div class="col-sm-4">
+                <strong>{{ entry.key }}</strong>
+              </div>
+              <div class="col-sm-8">
+                {{ entry.value }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!notification">
+            <div class="d-flex justify-content-center align-items-center">
+                <div class="spinner-grow text-secondary spinner-grow-sm blink-1" role="status">
+                  <span class="sr-only"></span>
+                </div>
+                <div class="spinner-grow text-secondary spinner-grow-sm blink-2" role="status">
+                  <span class="sr-only"></span>
+                </div>
+                <div class="spinner-grow text-secondary spinner-grow-sm blink-3" role="status">
+                  <span class="sr-only"></span>
+                </div>
+              </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

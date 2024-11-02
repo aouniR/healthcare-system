@@ -1,0 +1,134 @@
+<div class="row">
+  <div class="col-xl-8 col-md-6">
+    <app-bar-chart 
+    [totalAgents]="totalAgents" 
+    [totalPatients]="totalMedicalRecords">
+</app-bar-chart>
+</div>
+  <div class="col-xl-4 col-md-12">
+    <div class="card total-income-card overflow-hidden bg-primary-dark text-blocke">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="ms-2">
+            <h4 class="text-blocke f-w-600 mb-1">
+              <ng-container *ngIf="totalMetaMedicalRecords !== null; else loading">
+                {{ totalMetaMedicalRecords }}
+              </ng-container>
+              <ng-template #loading>
+                <div class="spinner-border text-secondary" role="status">
+                  <span class="sr-only"></span>
+                </div>
+              </ng-template>
+            </h4>
+            <p class="mb-0 opacity-50 text-sm">Total Meta-MedicalRecord</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card total-income-card overflow-hidden morning text-blocke">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="ms-2">
+            <h4 class="text-blocke f-w-600 mb-1">
+              <ng-container *ngIf="totalMetaMedicalMonitoring !== null; else loading">
+                {{ totalMetaMedicalMonitoring }}
+              </ng-container>
+              <ng-template #loading>
+                <div class="spinner-border text-secondary" role="status">
+                  <span class="sr-only"></span>
+                </div>
+              </ng-template>
+            </h4>
+            <p class="mb-0 opacity-50 text-sm">Total Meta-MedicalMonitoring</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card total-income-card warning overflow-hidden text-blocke">
+      <div class="card-body">
+        <div class="d-flex align-items-center">
+          <div class="ms-2">
+            <h4 class="f-w-600 mb-1">
+              <ng-container *ngIf="totalMetaMedicalProcedures !== null; else loading">
+                {{ totalMetaMedicalProcedures }}
+              </ng-container>
+              <ng-template #loading>
+                <div class="spinner-border text-secondary" role="status">
+                  <span class="sr-only"></span>
+                </div>
+              </ng-template>
+            </h4>
+            <p class="mb-0 opacity-50 text-sm">Total Meta-MedicalProcedure</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <div class="row mb-3 align-items-center">
+          <div class="col">
+            <h4>Patients Records</h4>
+          </div>
+          <div class="col-auto"></div>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item px-0 pb-0">
+              <div class="row align-items-start">
+                <div class="col">
+                  <h5 class="mb-0 text-sm">Records</h5>
+                </div>
+                <div class="col-auto">
+                  <h4 class="mb-0 text-sm">
+                    <ng-container *ngIf="totalMedicalRecords !== null; else loading">
+                      {{ totalMedicalRecords }}
+                    </ng-container>
+                    <ng-template #loading>
+                      <div class="spinner-border text-secondary" role="status">
+                        <span class="sr-only"></span>
+                      </div>
+                    </ng-template>
+                  </h4>
+                </div>
+              </div>
+
+              <div class="row align-items-start">
+                <div class="col">
+                  <h5 class="mb-0 text-sm">Procedure</h5>
+                </div>
+                <div class="col-auto">
+                  <h4 class="mb-0 text-sm">
+                    <ng-container *ngIf="totalMedicalProcedures !== null; else loading">
+                      {{ totalMedicalProcedures }}
+                    </ng-container>
+                    <ng-template #loading>
+                      <div class="spinner-border text-secondary" role="status">
+                        <span class="sr-only"></span>
+                      </div>
+                    </ng-template>
+                  </h4>
+                </div>
+              </div>
+
+              <div class="row align-items-start">
+                <div class="col">
+                  <h5 class="mb-0 text-sm">Monitoring</h5>
+                </div>
+                <div class="col-auto">
+                  <h4 class="mb-0 text-sm">
+                    <ng-container *ngIf="totalMedicalMonitoring !== null; else loading">
+                      {{ totalMedicalMonitoring }}
+                    </ng-container>
+                    <ng-template #loading>
+                      <div class="spinner-border text-secondary" role="status">
+                        <span class="sr-only"></span>
+                      </div>
+                    </ng-template>
+                  </h4>
+                </div>
+              </div>
+            </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

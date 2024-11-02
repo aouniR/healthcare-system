@@ -1,0 +1,22 @@
+<div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Settings</h4>
+          <form [formGroup]="userForm" (ngSubmit)="updateUser()">
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" formControlName="password" placeholder="Enter password" required>
+                <div *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched" class="text-danger">
+                  <small *ngIf="userForm.get('password')?.errors?.['required']">Password is required.</small>
+                  <small *ngIf="userForm.get('password')?.errors?.['pattern']">Password must be at least 8 characters and contain at least one letter and one number.</small>
+                </div>
+              </div>
+            <button type="submit" class="btn btn-primary" [disabled]="userForm.invalid">Update password</button>
+            <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  

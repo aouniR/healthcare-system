@@ -1,0 +1,46 @@
+.me-0 {
+  margin: 0 0 0 16px !important;
+}
+
+.link-container {
+  position: relative; 
+  display: inline-block;
+  transition: background-color 0.3s; 
+}
+
+.link-container:hover {
+  background-color: #f0f0f0; 
+}
+
+.stretched-link {
+  display: block;
+  padding: 10px;
+  text-decoration: none;
+  color: inherit; 
+}
+
+
+.pc-head-link {
+  position: relative;
+}
+
+.dropdown-menu {
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+.list-group-item {
+  transition: background-color 0.2s;
+}
+
+.list-group-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border: 2px solid white; 
+}

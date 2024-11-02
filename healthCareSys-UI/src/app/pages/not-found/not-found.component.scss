@@ -1,0 +1,16 @@
+.notFound-section {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100vh; 
+  background-image: url("/assets/images/not-found/not-found-background.jpg");
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+}
+
+.notFound-image {
+    max-width: 100%;
+    height: auto;
+}

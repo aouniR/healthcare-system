@@ -1,0 +1,95 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card shadow-lg border-0 rounded">
+      <div class="card-body">
+        <h4 class="mb-4 text-center">MetaModels List</h4>
+        <div class="mb-3 form-floating">
+          <input type="text" class="form-control" id="search" placeholder="Search metamodel by type..." [(ngModel)]="searchTerm">
+          <label for="search">Search metamodel by type...</label>
+        </div>
+        <table class="table table-striped">
+          <thead class="table-light">
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Description</th>
+              <th scope="col">Fields</th>
+              <th scope="col">Type</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let metamodel of metamodels | filter:searchTerm; let i = index">
+              <td>{{ metamodel.id }}</td>
+              <td>{{ metamodel.description }}</td>
+              <td>
+                <button class="btn btn-outline-secondary btn-sm" (click)="toggleFields(i)">Show Fields</button>
+                
+                <div *ngIf="showFieldsIndex === i" class="popup">
+                  <div class="popup-content">
+                    <span class="close" (click)="showFieldsIndex = null">&times;</span>
+                    <div *ngIf="metamodel.fields"> 
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th scope="col">Key</th>
+                            <th scope="col">Value</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let field of metamodel.fields | keyvalue">
+                            <td><strong>{{ field.key }}</strong></td>
+                            <td>{{ field.value }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div *ngIf="!metamodel.fields"> 
+                      <p>No Fields</p>
+                    </div>
+                  </div>
+                </div>
+              </td>                
+              <td>{{ metamodel.type }}</td>
+              <td>
+                <button class="btn btn-outline-info btn-sm" (click)="addFieldstoMetaModel(metamodel.id)">Add Fields</button>
+                <button class="btn btn-outline-danger btn-sm" (click)="deleteMetaModel(metamodel.id)">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div *ngIf="(metamodels | filter:searchTerm).length === 0" class="text-center my-3">
+          <div class="d-flex justify-content-center align-items-center">
+            <div class="spinner-grow text-secondary spinner-grow-sm blink-1" role="status">
+              <span class="sr-only"></span>
+            </div>
+            <div class="spinner-grow text-secondary spinner-grow-sm blink-2" role="status">
+              <span class="sr-only"></span>
+            </div>
+            <div class="spinner-grow text-secondary spinner-grow-sm blink-3" role="status">
+              <span class="sr-only"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade show" *ngIf="showModal" style="display: block;" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Confirm Deletion</h5>
+                <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>Are you sure you want to delete this metamodel?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">Cancel</button>
+                <button type="button" class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

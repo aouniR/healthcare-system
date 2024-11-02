@@ -1,0 +1,39 @@
+<header class="header">
+  <div #navbarArea id="" class="navbar-area" [class.sticky]="false" >
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-12">
+          <nav class="navbar navbar-expand-lg">
+            <div class="logo">
+              <a href="/">
+                <img width="200" src="assets/images/logo/logo2-removebg-preview.png" alt="logo" loading="lazy">
+              </a>
+            </div>
+            <button [ngClass]="{'navbar-toggler': true, 'active': isTogglerActive}" (click)="onTogglerClick()" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="toggler-icon"></span>
+              <span class="toggler-icon"></span>
+              <span class="toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse sub-menu-bar" [class.show]="isTogglerActive" id="navbarSupportedContent">
+              <div class="ms-auto">
+                <ul id="nav" class="navbar-nav ms-auto">
+                  <ng-container *ngFor="let item of menuItems">
+                    <li class="nav-item">
+                      <a class="page-scroll" 
+                         [class.active]="isActive(item.url)" 
+                         (click)="onMenuItemClick(item.url)" 
+                         (keyup.enter)="onMenuItemClick(item.url)" 
+                         tabindex="0">{{item.label}}</a>
+                    </li>
+                  </ng-container>
+                </ul>
+              </div>
+            </div>
+
+          </nav>
+        </div>
+      </div> 
+    </div> 
+  </div> 
+</header>

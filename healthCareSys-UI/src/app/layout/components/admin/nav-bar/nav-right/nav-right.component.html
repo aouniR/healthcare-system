@@ -1,0 +1,74 @@
+<div class="ms-auto">
+  <ul class="list-unstyled d-flex">
+    <li class="me-3">
+      <div class="dropdown pc-h-item" ngbDropdown>
+        <a
+          class="pc-head-link head-link-secondary dropdown-toggle arrow-none"
+          data-bs-toggle="dropdown"
+          href="javascript:"
+          ngbDropdownToggle
+        >
+          <span *ngIf="notifications.length > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {{ notifications.length }}
+          </span>
+          <i class="ti ti-bell"></i>
+        </a>
+        <div class="dropdown-menu dropdown-notification dropdown-menu-end pc-h-dropdown" ngbDropdownMenu>
+          <div class="dropdown-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">All Notifications</h5>
+            <button type="button" (click)="showNotification()" class="btn btn-outline-danger btn-sm">See them all</button>
+          </div>
+          <hr class="my-2">
+          
+          <ng-scrollbar style="max-height: 300px; overflow-y: auto;" visibility="hover">
+            <div class="dropdown-header px-0 text-wrap">
+              <div class="list-group list-group-flush w-100">
+                <div *ngIf="notifications.length === 0" class="list-group-item text-center">
+                  <p class="text-muted">No notifications available</p>
+                </div>
+                
+                <div *ngFor="let notification of notifications" class="list-group-item link-container">
+                  <a [routerLink]="['/admin/notifications/', notification.id]" class="stretched-link"></a>
+                  <p class="text-body fs-6">{{ notification.key }}
+                    <span class="float-end text-muted">{{ notification.creationTimestamp | date: 'short' }}</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </ng-scrollbar>
+        </div>
+      </div>
+    </li>
+    <li>
+      <div class="dropdown pc-h-item header-user-profile" ngbDropdown>
+        <a
+          class="pc-head-link head-link-primary dropdown-toggle arrow-none"
+          data-bs-toggle="dropdown"
+          href="javascript:"
+          ngbDropdownToggle
+        >
+          <img src="assets/images/user/avatar-2.jpg" alt="user-image" class="user-avatar rounded-circle" />
+          <span>
+            <i class="ti ti-settings"></i>
+          </span>
+        </a>
+        <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown" ngbDropdownMenu>
+          <div class="dropdown-header">
+            <h4 class="mb-0">Hello, <span class="small text-muted">{{ user?.username }}</span></h4>
+            <hr />
+            <ng-scrollbar style="height: 15vh" visibility="hover">
+              <a (click)="editSettings()" class="dropdown-item d-flex align-items-center">
+                <i class="ti ti-settings me-2"></i>
+                <span>Settings</span>
+              </a>
+              <a (click)="logout()" class="dropdown-item d-flex align-items-center">
+                <i class="ti ti-logout me-2"></i>
+                <span>Logout</span>
+              </a>
+            </ng-scrollbar>
+          </div>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
