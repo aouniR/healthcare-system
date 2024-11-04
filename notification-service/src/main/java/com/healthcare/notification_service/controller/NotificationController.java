@@ -1,10 +1,7 @@
 package com.healthcare.notification_service.controller;
 
-import com.healthcare.notification_service.dto.UserDto;
 import com.healthcare.notification_service.entity.Notification;
 import com.healthcare.notification_service.service.NotificationServiceImpl;
-
-import jakarta.ws.rs.PathParam;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;

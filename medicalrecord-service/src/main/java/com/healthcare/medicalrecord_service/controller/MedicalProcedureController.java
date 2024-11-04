@@ -26,7 +26,6 @@ public class MedicalProcedureController {
     
     private final MedicalRecordAdminServiceImpl medicalRecordAdminServiceImpl;
     
-    @Autowired
     public MedicalProcedureController(@Lazy MedicalRecordAdminServiceImpl medicalRecordAdminServiceImpl) {
         this.medicalRecordAdminServiceImpl = medicalRecordAdminServiceImpl;
     }
@@ -51,14 +50,26 @@ public class MedicalProcedureController {
         return ResponseEntity.ok(medicalRecordAdminServiceImpl.getMedicalProcedureById(id));
     }
 
+    @GetMapping("/getMedicalProcedureByPatientId/{id}")
+    public ResponseEntity<List<MedicalProcedure>> getMedicalProcedureByPatientId(@PathVariable UUID id) {
+        return ResponseEntity.ok(medicalRecordAdminServiceImpl.getMedicalProcedureByPatientId(id));
+    }
+    @DeleteMapping("/deleteMedicalProcedureById/{id}")
+    @PreAuthorize("hasRole('PROFESSIONNELDESANTE')")
+    public ResponseEntity<Void> deleteMedicalProcedureById(@PathVariable UUID id) {
+        medicalRecordAdminServiceImpl.deleteMedicalProcedureById(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/createMedicalProcedure")
+    @PreAuthorize("hasRole('PROFESSIONNELDESANTE')")
     public ResponseEntity<MedicalProcedure> createMedicalProcedure( @Valid @RequestBody CreateMedicalComponentRequest request,  Authentication authentication) {
         UUID agentId = UUID.fromString((String) authentication.getPrincipal());
         return ResponseEntity.ok(medicalRecordAdminServiceImpl.createMedicalProcedure(request, agentId));
     }
 
     @PutMapping("/addFieldsToMedicalProcedureById/{id}")
-
+    @PreAuthorize("hasRole('PROFESSIONNELDESANTE')")
     public ResponseEntity<MedicalProcedure> addFieldsToMedicalProcedureById(@PathVariable UUID id, @Valid @RequestBody FillCoupleOfMedicalDataRequest request) {
         return ResponseEntity.ok(medicalRecordAdminServiceImpl.fillCoupleOfMedicalProcedure(request, id));
     }

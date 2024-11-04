@@ -8,6 +8,8 @@ import com.healthcare.medicalrecord_service.repository.*;
 import com.healthcare.medicalrecord_service.request.*;
 import jakarta.ws.rs.NotFoundException;
 import lombok.AllArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +21,14 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class MedicalRecordAdminServiceImpl implements MedicalRecordAdminService {
     
     private final MedicalRecordRepository medicalRecordRepository;
+    @Autowired
     private final MedicalProcedureRepository medicalProcedureRepository;
     private final MedicalMonitoringRepository medicalMonitoringRepository;
     private final MedicalRecordSchemaRepository medicalRecordSchemaRepository;
@@ -63,7 +67,9 @@ public class MedicalRecordAdminServiceImpl implements MedicalRecordAdminService 
 
     @Override
     public List<MedicalProcedure> getAllMedicalProcedure(){
-        return medicalProcedureRepository.findAll();
+        List<MedicalProcedure> procedures = medicalProcedureRepository.findAll();
+        log.info("Retrieved {} medical procedures", procedures.size());
+        return procedures;
     }
 
     @Override
@@ -112,7 +118,7 @@ public class MedicalRecordAdminServiceImpl implements MedicalRecordAdminService 
     @Override
     public MedicalRecord getMedicalRecordById(UUID id){
         return medicalRecordRepository.findById(id)
-        .orElseThrow(() -> new NotFoundException("MedicalRcord not found"));
+        .orElseThrow(() -> new NotFoundException());
     }
 
     @Override
@@ -122,6 +128,24 @@ public class MedicalRecordAdminServiceImpl implements MedicalRecordAdminService 
     }
 
     @Override
+    public void deleteMedicalProcedureById(UUID id) {
+        MedicalProcedure toDelete = medicalProcedureRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("MedicalProcedure not found"));
+            medicalProcedureRepository.delete(toDelete);
+    }
+
+
+
+    @Override
+    public List<MedicalProcedure> getMedicalProcedureByPatientId(UUID id){
+        List<MedicalProcedure> allProcedures = medicalProcedureRepository.findAll();
+        return allProcedures.stream()
+            .filter(procedure -> procedure.getPatientId().equals(id))
+            .collect(Collectors.toList());
+    }
+
+
+    @Override
     public MedicalMonitoring getMedicalMonitoringById(UUID id){
         return medicalMonitoringRepository.findById(id)
         .orElseThrow(() -> new NotFoundException("MedicalMonitotring not found"));
@@ -129,10 +153,25 @@ public class MedicalRecordAdminServiceImpl implements MedicalRecordAdminService 
     }
 
     @Override
-    public MedicalRecord createMedicalRecord(CreateMedicalComponentRequest request, UUID agentId){
+    public void deleteMedicalMonitoringById(UUID id) {
+        MedicalMonitoring toDelete = medicalMonitoringRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException("MedicalMonitoring not found"));
+            medicalMonitoringRepository.delete(toDelete);
+    }
+
+    @Override
+    public List<MedicalMonitoring> getMedicalMonitoringByPatientId(UUID id){
+        List<MedicalMonitoring> allMonitoring = medicalMonitoringRepository.findAll();
+        return allMonitoring.stream()
+            .filter(procedure -> procedure.getPatientId().equals(id))
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public MedicalRecord createMedicalRecord(UUID agentId){
         MedicalRecord medicalRecord = new MedicalRecord();
         medicalRecord.setMedicalAgentId(agentId);
-        medicalRecord.setPatientId(request.getPatientId());
+        medicalRecord.setPatientId(medicalRecord.getId());
         try {
             Optional<MedicalRecordSchema> medicalMedicalRecordSchemaOpt = getMedicalRecordSchema();
         

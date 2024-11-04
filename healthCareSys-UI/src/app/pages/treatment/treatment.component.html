@@ -1,0 +1,97 @@
+<div class="container mt-4">
+  <h2 class="text-center">Patient Procedures </h2>
+  <h5 *ngIf="patientId" class="text-center">patientId = {{formatId(patientId)}}</h5>
+  <div class="card shadow-lg border-0 rounded">
+    <div class="card-body">
+      <table class="table table-striped">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">Procedure ID</th>
+            <th scope="col">Medical Agent ID</th>
+            <th scope="col">Creation Timestamp</th>
+            <th scope="col">Update Timestamp</th>
+            <th scope="col">Medical Procedure Data</th>
+            <th *ngIf="isProfSante" scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let procedure of patientProcedures">
+            <td>{{ formatId(procedure.id) }}</td>
+            <td>{{ formatId(procedure.medicalAgentId) }}</td>
+            <td>{{ procedure.creationTimestamp| date:'short' }}</td>
+            <td>{{ procedure.updateTimestamp| date:'short' }}</td>
+            <td>
+              <button class="btn btn-outline-secondary btn-sm" (click)="openModal(procedure)">
+                Show Data
+              </button>
+            </td>
+            <td *ngIf="isProfSante">
+              <button class="btn btn-outline-info btn-sm" (click)="navigateToUpdateProcedure(procedure.id)">
+                Update 
+              </button>
+              <button class="btn btn-outline-danger btn-sm" (click)="openDeleteModal(procedure.id)">
+                Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div *ngIf="patientProcedures.length === 0" class="text-center my-3">
+        <p>No procedures found for this patient.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade show" *ngIf="showInfoModal" style="display: block;" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Procedure Details</h5>
+          <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Procedure ID:</strong> {{ formatId(selectedProcedure?.id) }}</p>
+          <p><strong>Patient ID:</strong> {{ formatId(selectedProcedure?.patientId) }}</p>
+          <p><strong>Medical Agent ID:</strong> {{ formatId(selectedProcedure?.medicalAgentId) }}</p>
+          <p><strong>Creation Timestamp:</strong> {{ selectedProcedure?.creationTimestamp | date:'medium'}}</p>
+          <p><strong>Update Timestamp:</strong> {{ selectedProcedure?.updateTimestamp | date:'medium'}}</p>
+          <h5>Medical Procedure Data</h5>
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let entry of selectedProcedure?.medicalProcedureData | keyvalue">
+                <td>{{ entry.key }}</td>
+                <td>{{ entry.value }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div  class="modal fade show" *ngIf="showDeleteModal && isProfSante" style="display: block;" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirm Deletion</h5>
+          <button type="button" class="btn-close" (click)="closeDeleteModal()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Are you sure you want to delete this medical-Procedure?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" (click)="closeDeleteModal()">Cancel</button>
+          <button type="button" class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+<div class="row">
+    <div class="col-xl-12">
+      <div class="card shadow-lg border-0 rounded">
+        <div class="card-body">
+          <h4 class="card-title mb-4 text-center">Add New Schema</h4>
+          <form [formGroup]="schemaForm" (ngSubmit)="addSchema()">
+            
+            <div class="mb-3">
+              <label for="schemaType" class="form-label">Schema Type</label>
+              <select class="form-select" id="schemaType" formControlName="schemaType" (change)="fetchMetaModels()" required>
+                <option value="">Select schema type</option>
+                <option *ngFor="let type of schemaTypes" [value]="type">{{ type }}</option>
+              </select>
+              <div *ngIf="schemaForm.get('schemaType')?.invalid && schemaForm.get('schemaType')?.touched" class="text-danger mt-1">
+                <small>Schema type is required.</small>
+              </div>
+            </div>
+  
+            <div class="mb-3">
+              <label for="metamodelId" class="form-label">Metamodel ID</label>
+              <select class="form-select" id="metamodelId" formControlName="metamodelId" required>
+                <option value="">Select metamodel ID</option>
+                <option *ngFor="let model of metamodels" [value]="model.id">{{ model.description }}</option> 
+              </select>
+              <div *ngIf="schemaForm.get('metamodelId')?.invalid && schemaForm.get('metamodelId')?.touched" class="text-danger mt-1">
+                <small>Metamodel ID is required.</small>
+              </div>
+            </div>
+  
+            <div class="d-flex justify-content-between mt-4">
+              <button type="submit" class="btn btn-outline-primary" [disabled]="schemaForm.invalid">Add Schema</button>
+              <button type="button" class="btn btn-outline-secondary" (click)="cancel()">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  

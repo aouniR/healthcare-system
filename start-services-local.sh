@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Configuration
-SERVICES="eureka-server config-server api-gateway authentication-service user-service metamodel-service medicalrecord-service notification-service"
+SERVICES="eureka-server config-server api-gateway authentication-serviceuser-service metamodel-service medicalrecord-service notification-service"
 
 DOCKER_COMPOSE_FILE_db_CONTAINERS="docker-compose-db.yml"
 DOCKER_COMPOSE_FILE_kafka_CONTAINERS="docker-compose-servers.yml"

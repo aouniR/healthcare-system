@@ -37,7 +37,7 @@
             <select class="form-select" id="role" formControlName="role" required>
               <option value="">Select role</option>
               <option value="ADMIN">ADMIN</option> 
-              <option value="PROFESSIONNELDESANTE">PROFESSIONNEL DES SANTE</option>
+              <option value="PROFESSIONNELDESANTE">PROFESSIONNEL DE SANTE</option>
               <option value="AGENTADMINISTRATIF">AGENT ADMINISTRATIF</option>
             </select>
             <div *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched" class="text-danger mt-1">

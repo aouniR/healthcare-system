@@ -1,0 +1,92 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card shadow-lg border-0 rounded">
+      <div class="card-body">
+        <h4 class="mb-4 text-center">Patients List</h4>
+
+        <div class="mb-3 form-floating">
+          <input type="text" class="form-control form-control-lg" id="search" placeholder="Search patients..." [(ngModel)]="searchTerm">
+          <label for="search">Search patients...</label>
+        </div>
+
+        <table class="table table-hover table-striped">
+          <thead class="table-light">
+            <tr *ngIf="patients && patients.length > 0">
+              <th scope="col" *ngFor="let key of getKeys(patients[0])">{{ key | titlecase }}</th>
+              <th scope="col" class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let patient of (patients || []) | filter:searchTerm">
+              <td *ngFor="let key of getKeys(patient)">
+                <ng-container *ngIf="key === 'patientId'; else defaultCell">
+                  {{ formatPatientId(patient[key]) }}
+                </ng-container>
+                <ng-template #defaultCell>
+                  {{ patient[key] }}
+                </ng-template>
+              </td>
+              <td class="text-center">
+
+              <div class="btn-group">
+                  <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                      Actions
+                  </button>
+                  <ul class="dropdown-menu">
+                      <li *ngIf="isProfSante">
+                          <a class="dropdown-item" (click)="addTreatment(patient.patientId)">Add Treatment</a>
+                      </li>
+                      <li>
+                          <a class="dropdown-item" (click)="seeTreatments(patient.patientId)">See Treatment</a>
+                      </li>
+                      <li *ngIf="isAgent">
+                          <a class="dropdown-item" (click)="seeMonitoring(patient.patientId)">See Monitoring</a>
+                      </li>
+                      <li *ngIf="isAgent">
+                          <a class="dropdown-item" (click)="addMonitoring(patient.patientId)">Add Monitoring</a>
+                      </li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li *ngIf="isAgent">
+                        <a class="dropdown-item" (click)="updateRecord(patient.patientId)">Update Record</a>
+                      </li>
+                  </ul>
+              </div>
+
+                
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div *ngIf="(patients?.length === 0) || !patients" class="text-center my-3">
+          <p class="text-muted">No patients found.</p>
+          <div class="d-flex justify-content-center align-items-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal fade show" *ngIf="showProfSanteModal || showAgentModal" style="display: block;" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Confirm Action</h5>
+                <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p *ngIf="isProfSante">Are you sure you want to add treatment for this patient?</p>
+                <p *ngIf="isAgent">Are you sure you want to add monitoringfor this patient?</p>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">Cancel</button>
+                <button *ngIf="isAgent" type="button" class="btn btn-outline-info" (click)="confirmAddMonitoring()">Add Monitoring</button>
+                <button *ngIf="isProfSante" type="button" class="btn btn-outline-primary" (click)="confirmAddTreatment()">Add Treatment</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,79 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1.5rem;
+  
+    .card {
+      background-color: #f8f9fa; 
+      border: none;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  
+      &-title {
+        color: #343a40; 
+        margin-bottom: 1rem;
+      }
+  
+      .form-control {
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+  
+        &:focus {
+          border-color: #80bdff;
+          box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+      }
+  
+      .form-floating {
+        margin-bottom: 1.5rem;
+  
+        label {
+          color: #495057;
+        }
+      }
+  
+      .btn {
+        min-width: 120px;
+        padding: 0.5rem 1rem;
+  
+        &.btn-outline-primary {
+          border-color: #007bff;
+          color: #007bff;
+  
+          &:hover {
+            background-color: #007bff;
+            color: white;
+          }
+        }
+  
+        &.btn-outline-secondary {
+          border-color: #6c757d;
+          color: #6c757d;
+  
+          &:hover {
+            background-color: #6c757d;
+            color: white;
+          }
+        }
+      }
+  
+      .text-danger {
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+      }
+    }
+  
+    .treatment-info {
+      margin-bottom: 2rem;
+  
+      p {
+        font-size: 1rem;
+        color: #495057;
+  
+        strong {
+          color: #007bff; 
+        }
+      }
+    }
+  }
+  

@@ -1,0 +1,38 @@
+<div class="container">
+    <div class="row">
+      <div class="col-xl-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title text-center">Treatment Information</h4>
+            <div *ngIf="medicalProcedure" class="treatment-info">
+              <p><strong>ID:</strong> {{ formatId(medicalProcedure.id) }}</p>
+              <p><strong>Patient ID:</strong> {{ formatId(medicalProcedure.patientId )}}</p>
+              <p><strong>Medical Agent ID:</strong> {{ formatId(medicalProcedure.medicalAgentId) }}</p>
+              <p><strong>Creation Timestamp:</strong> {{ medicalProcedure.creationTimestamp | date: 'short' }}</p>
+              <p><strong>Update Timestamp:</strong> {{ medicalProcedure.updateTimestamp | date: 'short' }}</p>
+            </div>
+  
+            <h4 class="card-title text-center mt-4">Update Medical Procedure Data</h4>
+            <form [formGroup]="form" (ngSubmit)="submit()">
+              <div *ngFor="let key of form.controls | keyvalue">
+                <div class="mb-3 form-floating">
+                  <input 
+                    [id]="key.key" 
+                    [formControlName]="key.key" 
+                    class="form-control" 
+                    placeholder="Enter {{ key.key }}" 
+                  />
+                  <label [for]="key.key">{{ key.key }}</label>
+                </div>
+              </div>
+              <div class="d-flex justify-content-between mt-4">
+                <button type="submit" class="btn btn-outline-primary" [disabled]="form.invalid">Submit</button>
+                <button type="button" class="btn btn-outline-secondary" (click)="cancel()">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

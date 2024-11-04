@@ -45,7 +45,6 @@ public class MedicalMonitoring {
         }
     }
     
-
     public void setMedicalMonitoringData(String fieldName, JsonNode value) {
         validateFieldName(fieldName);
         this.medicalMonitoringData.put(fieldName,value);
@@ -57,14 +56,23 @@ public class MedicalMonitoring {
                 String fieldName = entry.getKey();
                 JsonNode value = entry.getValue();
                 validateFieldName(fieldName);
-                medicalMonitoringData.put(fieldName, value);
+                if (value.isNull()) {
+                    medicalMonitoringData.put(fieldName, null);
+                } else if (value.isTextual()) {
+                    medicalMonitoringData.put(fieldName, value.asText());
+                } else if (value.isNumber()) {
+                    medicalMonitoringData.put(fieldName, value.numberValue());
+                } else if (value.isBoolean()) {
+                    medicalMonitoringData.put(fieldName, value.asBoolean());
+                } else {
+                    throw new IllegalArgumentException("Unsupported JSON type for field: " + fieldName);
+                }
             });
         } else {
             throw new IllegalArgumentException("Expected a JSON object");
         }
     }
     
-
     public Object getMedicalMonitoringData(String fieldName) {
         return medicalMonitoringData.get(fieldName);
     }

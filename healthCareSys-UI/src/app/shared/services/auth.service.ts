@@ -61,6 +61,32 @@ export class AuthService {
     }
   }
 
+  isPorfSante(): boolean {
+    const token = localStorage.getItem(this.AUTH_KEY);
+    if (!token) return false; 
+  
+    try {
+      const decodedToken: any = jwtDecode(token);
+      return decodedToken.roles && decodedToken.roles.includes('ROLE_PROFESSIONNELDESANTE');
+    } catch (error) {
+      console.error('Failed to decode token:', error);
+      return false; 
+    }
+  }
+
+  isAgent(): boolean {
+    const token = localStorage.getItem(this.AUTH_KEY);
+    if (!token) return false; 
+  
+    try {
+      const decodedToken: any = jwtDecode(token);
+      return decodedToken.roles && decodedToken.roles.includes('ROLE_AGENTADMINISTRATIF');
+    } catch (error) {
+      console.error('Failed to decode token:', error);
+      return false; 
+    }
+  }
+
   private isTokenExpired(token: string): boolean {
     try {
       const decodedToken: any = jwtDecode(token);

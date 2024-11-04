@@ -94,6 +94,36 @@ const NavigationItems = [
       }
     ]
   },
+  {
+    id: 'recordsSchemas',
+    title: 'Schema management',
+    type: 'group',
+    icon: 'icon-navigation',
+    children: [
+      {
+        id: 'crudMedicalRecordSchema',
+        title: 'Component Schema',
+        type: 'collapse',
+        icon: 'ti ti-sitemap',
+        children: [
+          {
+            id: 'addNew',
+            title: 'Add New',
+            type: 'item',
+            url: 'schemas/addSchema',
+            breadcrumbs: false
+          },
+          {
+            id: 'listMedicalRecords',
+            title: 'List All',
+            type: 'item',
+            url: 'schemas/listAll',
+            breadcrumbs: false
+          }
+        ]
+      }
+    ]
+  }
 ];
 
 @Injectable()

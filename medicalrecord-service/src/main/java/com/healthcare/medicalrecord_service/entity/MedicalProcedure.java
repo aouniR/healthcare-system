@@ -5,6 +5,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +17,7 @@ import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Document(collection = "medicalProcedures")
 public class MedicalProcedure {
 
@@ -58,12 +61,23 @@ public class MedicalProcedure {
                 String fieldName = entry.getKey();
                 JsonNode value = entry.getValue();
                 validateFieldName(fieldName);
-                medicalProcedureData.put(fieldName, value);
+                if (value.isNull()) {
+                    medicalProcedureData.put(fieldName, null);
+                } else if (value.isTextual()) {
+                    medicalProcedureData.put(fieldName, value.asText());
+                } else if (value.isNumber()) {
+                    medicalProcedureData.put(fieldName, value.numberValue());
+                } else if (value.isBoolean()) {
+                    medicalProcedureData.put(fieldName, value.asBoolean());
+                } else {
+                    throw new IllegalArgumentException("Unsupported JSON type for field: " + fieldName);
+                }
             });
         } else {
             throw new IllegalArgumentException("Expected a JSON object");
         }
     }
+    
     
     public Object getMedicalProcedureData(String fieldName) {
         return this.medicalProcedureData.get(fieldName);

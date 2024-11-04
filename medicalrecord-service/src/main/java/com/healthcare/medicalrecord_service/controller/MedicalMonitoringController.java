@@ -52,15 +52,27 @@ public class MedicalMonitoringController {
         return ResponseEntity.ok(medicalRecordAdminServiceImpl.getMedicalMonitoringById(id));
     }
 
+    @GetMapping("/getMedicalMonitoringByPatientId/{id}")
+    public ResponseEntity<List<MedicalMonitoring>> getMedicalMonitoringByPatientId(@PathVariable UUID id) {
+        return ResponseEntity.ok(medicalRecordAdminServiceImpl.getMedicalMonitoringByPatientId(id));
+    }
 
     @PostMapping("/createMedicalMonitoring")
+    @PreAuthorize("hasRole('AGENTADMINISTRATIF')")
     public ResponseEntity<MedicalMonitoring> createMedicalMonitoring( @Valid @RequestBody CreateMedicalComponentRequest request,  Authentication authentication) {
         UUID agentId = UUID.fromString((String) authentication.getPrincipal());
         return ResponseEntity.ok(medicalRecordAdminServiceImpl.createMedicalMonitoring(request, agentId));
     }
 
-    @PutMapping("/addFieldsToMedicalMonitoringById/{id}")
+    @DeleteMapping("/deleteMedicalMonitoringById/{id}")
+    @PreAuthorize("hasRole('AGENTADMINISTRATIF')")
+    public ResponseEntity<Void> deleteMedicalMonitoringById(@PathVariable UUID id) {
+        medicalRecordAdminServiceImpl.deleteMedicalMonitoringById(id);
+        return ResponseEntity.noContent().build();
+    }
 
+    @PutMapping("/addFieldsToMedicalMonitoringById/{id}")
+    @PreAuthorize("hasRole('AGENTADMINISTRATIF')")
     public ResponseEntity<MedicalMonitoring> addFieldsToMedicalMonitoringById(@PathVariable UUID id, @Valid @RequestBody FillCoupleOfMedicalDataRequest request) {
         return ResponseEntity.ok(medicalRecordAdminServiceImpl.fillCoupleOfMedicalMonitoring(request, id));
     }

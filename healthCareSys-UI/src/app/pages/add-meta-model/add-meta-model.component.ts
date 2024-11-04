@@ -19,7 +19,9 @@ export default class AddMetaModelComponent {
     { value: 'SUIVI', label: 'Suivi' },
   ];
 
-  constructor(private fb: FormBuilder, private metaModelsService: MetaModelsService,  private router: Router) {
+  constructor(private fb: FormBuilder, 
+    private metaModelsService: MetaModelsService, 
+    private router: Router) {
     this.metaModelForm = this.fb.group({
       description: ['', Validators.required],
       type: ['', Validators.required]

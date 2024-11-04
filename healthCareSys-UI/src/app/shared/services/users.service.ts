@@ -74,7 +74,7 @@ export class UserService {
     }
   }
 
-  async updateUser(userId: string | null, userData: any) {
+  async updateUserByAdmin(userId: string | null, userData: any) {
     try {
         const response = await fetch(`http://localhost:8080/users/updateByAdmin/${userId}`, {
         method: 'PUT',
@@ -109,6 +109,25 @@ export class UserService {
         throw new Error(`Failed to delete user: ${response.statusText} - ${JSON.stringify(errorData)}`);
       }
       return await response.status; 
+    } catch (error) {
+      console.error('Error deleting users:', error);
+      throw error;
+    }
+  }
+
+  async updateUserByAgent(userId: string | null, userData: any) {
+    try {
+        const response = await fetch(`http://localhost:8080/users/update/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer  ${localStorage.getItem('authToken')}`
+        },
+        body: JSON.stringify(userData)
+      });
+
+      if (!response.ok) throw new Error('Error updating user');
+      return await response.status;
     } catch (error) {
       console.error('Error deleting users:', error);
       throw error;

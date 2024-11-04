@@ -51,7 +51,7 @@ export default class UpdateUserComponent implements OnInit{
       };
 
       try {
-        const status = await this.userService.updateUser(this.userId, updatedData);
+        const status = await this.userService.updateUserByAdmin(this.userId, updatedData);
         if (status === 200) {
           this.router.navigate(['/admin/users/listUsers']); 
         } else {

@@ -29,11 +29,24 @@ export default class SettingsComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.userId = this.route.snapshot.paramMap.get('id'); 
+    if(this.authService.isAdmin()){
+      console.log("Admin");
+      this.userId = this.route.snapshot.paramMap.get('id'); 
+    }
+    else{
+      this.userId = this.authService.getUserId();
+      console.log("isNotAdmin, id:",this.userId);
+    }
+    
   }
 
   cancel(){
-    this.router.navigate(['/admin/dashboard']); 
+    if(this.authService.isAdmin())
+    this.router.navigate(['/admin/dashboard']);
+    else if(this.authService.isPorfSante())
+    this.router.navigate(['/profSante/patients']);
+    else
+    this.router.navigate(['/agent/patients']);
   }
 
   async updateUser() {
@@ -43,7 +56,11 @@ export default class SettingsComponent implements OnInit{
       };
       
       try {
-        const status = await this.userService.updateUser(this.userId, updatedData);
+        let status;
+        if(this.authService.isAdmin())
+        status = await this.userService.updateUserByAdmin(this.userId, updatedData);
+        else
+        status = await this.userService.updateUserByAgent(this.userId, updatedData);
         if (status === 200) {
           this.authService.logout(); 
           this.router.navigate(['/login']);

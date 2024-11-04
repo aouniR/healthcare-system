@@ -59,7 +59,17 @@ public class MedicalRecord {
                 String fieldName = entry.getKey();
                 JsonNode value = entry.getValue();
                 validateFieldName(fieldName);
-                patientData.put(fieldName, value);
+                if (value.isNull()) {
+                    patientData.put(fieldName, null);
+                } else if (value.isTextual()) {
+                    patientData.put(fieldName, value.asText());
+                } else if (value.isNumber()) {
+                    patientData.put(fieldName, value.numberValue());
+                } else if (value.isBoolean()) {
+                    patientData.put(fieldName, value.asBoolean());
+                } else {
+                    throw new IllegalArgumentException("Unsupported JSON type for field: " + fieldName);
+                }
             });
         } else {
             throw new IllegalArgumentException("Expected a JSON object");

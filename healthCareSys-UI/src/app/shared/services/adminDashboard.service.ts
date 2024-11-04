@@ -209,5 +209,128 @@ export class adminDashboardService {
       console.error('Error fetching agent count:', error);
     }
   }
+
+  async createMedicalRecordSchema(request: any) {
+    try {
+      const response = await fetch(`http://localhost:8080/medicalrecords/saveMedicalRecordSchema`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer '+localStorage.getItem('authToken'),
+        },
+        body: JSON.stringify(request) 
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return await response.status;
+    } catch (error) {
+      console.error('Error fetching agent count:', error);
+      return null;
+    }
+  }
+
+  async getMedicalRecordSchema() {
+    try {
+      const response = await fetch(`http://localhost:8080/medicalrecords/getMedicalRecordSchema`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer '+localStorage.getItem('authToken')
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching agent count:', error);
+      return null;
+    }
+  }
+
+  async createMedicalProcedureSchema(request: any) {
+    try {
+      const response = await fetch(`http://localhost:8080/medicalrecords/saveMedicalProcedureSchema`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer '+localStorage.getItem('authToken'),
+        },
+        body: JSON.stringify(request) 
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return await response.status;
+    } catch (error) {
+      console.error('Error fetching agent count:', error);
+      return null;
+    }
+  }
+
+  async getMedicalProcedureSchema() {
+    try {
+      const response = await fetch(`http://localhost:8080/medicalrecords/getMedicalProcedureSchema`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer '+localStorage.getItem('authToken')
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching agent count:', error);
+      return null;
+    }
+  }
+
+  async createMedicalMonitoringSchema(request: any) {
+    try {
+      const response = await fetch(`http://localhost:8080/medicalrecords/saveMedicalMonitoringSchema`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer '+localStorage.getItem('authToken'),
+        },
+        body: JSON.stringify(request) 
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return await response.status;
+    } catch (error) {
+      console.error('Error fetching agent count:', error);
+      return null;
+    }
+  }
+
+  async getMedicalMonitoringSchema() {
+    try {
+      const response = await fetch(`http://localhost:8080/medicalrecords/getMedicalMonitoringSchema`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer '+localStorage.getItem('authToken')
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching agent count:', error);
+      return null;
+    }
+  }
 }
 

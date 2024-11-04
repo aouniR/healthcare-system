@@ -18,8 +18,12 @@ public interface MedicalRecordAdminService {
     List<Integer> getNumberMedicalMonitoringByMonth(int year);
     MedicalRecord getMedicalRecordById(UUID id);
     MedicalProcedure getMedicalProcedureById(UUID id);
+    List<MedicalProcedure> getMedicalProcedureByPatientId(UUID id);
+    void deleteMedicalProcedureById(UUID id);
     MedicalMonitoring getMedicalMonitoringById(UUID id);
-    MedicalRecord createMedicalRecord(CreateMedicalComponentRequest request, UUID agentId);
+    List<MedicalMonitoring> getMedicalMonitoringByPatientId(UUID id);
+    void deleteMedicalMonitoringById(UUID id); 
+    MedicalRecord createMedicalRecord(UUID agentId);
     MedicalProcedure createMedicalProcedure(CreateMedicalComponentRequest request, UUID agentId);
     MedicalMonitoring createMedicalMonitoring(CreateMedicalComponentRequest request, UUID agentId);
     MedicalRecord fillCoupleOfMedicalRecord(FillCoupleOfMedicalDataRequest request, UUID dataId);
