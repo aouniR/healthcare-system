@@ -5,6 +5,8 @@ import { AppComponent } from './app.component';
 import { LandingPageModule } from './pages/landing-page/landing-page.module';
 import { SharedModule } from './shared/shared.module';
 import { ToastrModule } from 'ngx-toastr';
+import { AuthInterceptorService } from './shared/services/auth-interceptor.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 export const COMPONENTS = [
   AppComponent
@@ -22,4 +24,8 @@ export const IMPORTS = [
   SharedModule
 ];
 
-export const SERVICES = [];
+export const SERVICES = [  {
+  provide: HTTP_INTERCEPTORS,
+  useClass: AuthInterceptorService,
+  multi: true
+}];

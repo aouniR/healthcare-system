@@ -8,7 +8,7 @@
         <h6 class="card-subtitle mb-2 text-muted">ID: {{ notificationId }}</h6>
         <div *ngIf="notification">
           <p><strong>Key:</strong> {{ notification.key }}</p>
-          <p><strong>Created At:</strong> {{ notification.creationTimestamp | date:'medium' }}</p>
+          <p><strong>Created At:</strong> {{ notification.creationTimestamp | date:'short' }}</p>
           <p><strong>User ID:</strong> {{ notification.userId }}</p>
           <hr>
           <h6>Message Details:</h6>

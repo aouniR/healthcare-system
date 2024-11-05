@@ -10,7 +10,7 @@
             <div class="notification-card p-3 border rounded">
               <h5>{{ notification.key }}</h5>
               <p><strong>Message:</strong> {{ parseMessage(notification.message) | json }}</p>
-              <p><strong>Created At:</strong> {{ notification.creationTimestamp | date:'medium' }}</p>
+              <p><strong>Created At:</strong> {{ notification.creationTimestamp  | date:'short' }}</p>
               <button class="btn btn-info btn-sm" (click)="viewDetails(notification.id)">View Details</button>
               <button class="btn btn-danger btn-sm" (click)="deleteNotification(notification.id)">Delete</button>
             </div>

@@ -88,15 +88,16 @@ Each service has its own isolated database, ensuring loose coupling and scalabil
 3. **Frontend Setup**:
    - Navigate to the frontend directory:
      ```bash
-      //TODO
+      cd healthCareSys-UI
      ```
    - Install dependencies and start the Angular app:
      ```bash
-      //TODO
+      npm install
+      ng serve
      ```
 
 4. **Access the Application**:
-   - The frontend can be accessed at `//TODO`.
+   - The frontend can be accessed at [healthCareSys-UI](http://localhost:4200/).
    - Backend endpoints are available through [Postman](https://app.getpostman.com/join-team?invite_code=5380bde7adbd64f509607b4f0ff2d05a&target_code=5d9aec0e2a8a4567a57840e2e2db92ac).
    - Real-time monitoring of all services is accessible at [Eureka Server](http://localhost:8761/).
    - The Kafka UI for managing Kafka topics and messages can be accessed at [Kafka UI](http://localhost:9090/).
