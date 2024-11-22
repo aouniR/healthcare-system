@@ -37,7 +37,7 @@ export default class UpdateUserComponent implements OnInit{
 
   async fetchUser() {
     if (this.userId) {
-      this.existingUser = await this.userService.getUserById(this.userId); 
+      this.existingUser = await this.userService.getUserByIdToUpdate(this.userId); 
       this.userForm.patchValue(this.existingUser);
     }
   }

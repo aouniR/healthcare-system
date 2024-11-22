@@ -9,6 +9,7 @@
           <div *ngFor="let notification of notifications | filter:searchTerm" class="mb-3">
             <div class="notification-card p-3 border rounded">
               <h5>{{ notification.key }}</h5>
+              <p><strong>ID:</strong> {{notification.id}}</p>
               <p><strong>Message:</strong> {{ parseMessage(notification.message) | json }}</p>
               <p><strong>Created At:</strong> {{ notification.creationTimestamp  | date:'short' }}</p>
               <button class="btn btn-info btn-sm" (click)="viewDetails(notification.id)">View Details</button>
@@ -28,7 +29,7 @@
                   </button>
                 </div>
                 <div class="modal-body">
-                  <p>Are you sure you want to delete this notification?</p>
+                  <p>Are you sure you want to delete this notification, ID : {{notificationToDelete}}?</p>
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancel</button>

@@ -57,12 +57,6 @@
             <p><strong>Update Timestamp:</strong> {{ selectedMonitoring?.updateTimestamp | date:'medium'}}</p>
             <h5>Medical Monitoring Data</h5>
             <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>Key</th>
-                  <th>Value</th>
-                </tr>
-              </thead>
               <tbody>
                 <tr *ngFor="let entry of selectedMonitoring?.medicalMonitoringData | keyvalue">
                   <td>{{ entry.key }}</td>

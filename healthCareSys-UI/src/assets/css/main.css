@@ -652,12 +652,16 @@ p {
   left: 0;
   width: 100%;
   z-index: 99;
+  background: linear-gradient(to bottom, rgba(0, 255, 255, 0.3), rgba(0, 191, 255, 0.2)); /* More transparent blue-green gradient */
   -webkit-transition: all 0.3s ease-out 0s;
   -moz-transition: all 0.3s ease-out 0s;
   -ms-transition: all 0.3s ease-out 0s;
   -o-transition: all 0.3s ease-out 0s;
   transition: all 0.3s ease-out 0s;
 }
+
+
+
 
 .sticky {
   position: fixed;

@@ -74,6 +74,26 @@ export class UserService {
     }
   }
 
+  async getUserByIdToUpdate(userId: string) {
+   try {
+     const response = await fetch(`http://localhost:8080/users/getUserById/${userId}`, {
+       method: 'GET',
+       headers: {
+         'Content-Type': 'application/json',
+         'Authorization': `Bearer  ${localStorage.getItem('authToken')}`
+       }
+     });
+     if (!response.ok) {
+       const errorData = await response.json();
+       throw new Error(`Failed to fetch users: ${response.statusText} - ${JSON.stringify(errorData)}`);
+     }
+     return await response.json();
+   } catch (error) {
+     console.error('Error fetching users:', error);
+     throw error;
+   }
+ }
+
   async updateUserByAdmin(userId: string | null, userData: any) {
     try {
         const response = await fetch(`http://localhost:8080/users/updateByAdmin/${userId}`, {

@@ -2,12 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { adminDashboardService } from '../../shared/services/adminDashboard.service';
-import { ToastrModule, ToastrService } from 'ngx-toastr'; 
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-schema',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ToastrModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './add-schema.component.html',
   styleUrls: ['./add-schema.component.scss'] 
 })
@@ -16,7 +16,9 @@ export default class AddSchemaComponent {
   schemaTypes = ['ACTE_MEDICAL', 'DOSSIER_MEDICAL', 'SUIVI'];
   metamodels: any[] = [];
 
-  constructor(private fb: FormBuilder, private dashService: adminDashboardService, private toastr: ToastrService) {
+  constructor(private fb: FormBuilder, 
+    private dashService: adminDashboardService,
+    private router: Router) {
     this.schemaForm = this.fb.group({
       schemaType: ['', Validators.required],
       metamodelId: ['', Validators.required]
@@ -67,15 +69,16 @@ export default class AddSchemaComponent {
       console.log('isValidId:',isValidId); 
       if (isValidId) {
         console.log('Schema created successfully:',isValidId); 
-        this.toastr.success('Schema created successfully!', 'Success'); 
+        alert('Schema created successfully!'); 
+        this.router.navigate(['/admin/schemas/listAll']);
         this.schemaForm.reset(); 
         this.metamodels = []; 
       } else {
         console.log('Failed to create schema:',isValidId); 
-        this.toastr.error('Failed to create schema', 'Error'); 
+        alert('Failed to create schema'); 
       }
     } else {
-      this.toastr.warning('Please fill in all required fields', 'Warning'); 
+      alert('Please fill in all required fields'); 
     }
   }
 

@@ -45,7 +45,7 @@
                       <li *ngIf="isAgent">
                           <a class="dropdown-item" (click)="addMonitoring(patient.patientId)">Add Monitoring</a>
                       </li>
-                      <li><hr class="dropdown-divider"></li>
+                      <li *ngIf="isAgent"><hr class="dropdown-divider"></li>
                       <li *ngIf="isAgent">
                         <a class="dropdown-item" (click)="updateRecord(patient.patientId)">Update Record</a>
                       </li>
@@ -75,8 +75,8 @@
                 <button type="button" class="btn-close" (click)="closeModal()" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                <p *ngIf="isProfSante">Are you sure you want to add treatment for this patient?</p>
-                <p *ngIf="isAgent">Are you sure you want to add monitoringfor this patient?</p>
+                <p *ngIf="isProfSante">Are you sure you want to add a treatment report for this patient?</p>
+                <p *ngIf="isAgent">Do you want to add a monitoring report for this patient?</p>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" (click)="closeModal()">Cancel</button>

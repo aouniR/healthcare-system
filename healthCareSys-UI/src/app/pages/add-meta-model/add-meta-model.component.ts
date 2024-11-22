@@ -36,8 +36,8 @@ export default class AddMetaModelComponent {
         await this.metaModelsService.createMetaModel(metamodelData);
         this.router.navigate(['/admin/metaModel/listAll']);
       } catch (error) {
-        console.error('Error adding user:', error);
-
+        alert('Error adding metamodel')
+        console.error('Error adding metamodel:', error);
       }
     }
   }

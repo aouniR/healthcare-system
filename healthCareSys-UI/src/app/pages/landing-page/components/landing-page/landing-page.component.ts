@@ -17,7 +17,7 @@ export class LandingPageComponent implements OnInit {
           subtitle: 'Streamlining Healthcare Management',
           headline: 'Welcome to Your Comprehensive HealthCare System!',
           subheadline: 'A proof of concept for a dynamic and efficient healthcare ERP solution.',
-          button_url: '/login',
+          button_url: 'login',
           button_label: 'Access the Platform',
           image: 'assets/images/hero/rb_21.png',
           scroll_anchor_id: '1'

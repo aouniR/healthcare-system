@@ -21,7 +21,7 @@ public class NotificationController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Notification> getUserById(@PathVariable UUID id) {
+    public ResponseEntity<Notification> getNotificationById(@PathVariable UUID id) {
         return ResponseEntity.ok(notificationServiceImpl.getNotificationById(id));
     }
 

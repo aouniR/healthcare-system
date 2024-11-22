@@ -79,12 +79,8 @@ const routes: Routes = [
       children: [
         {
           path: '',
-          redirectTo: 'dashboard',
+          redirectTo: 'patients',
           pathMatch: 'full'
-        },
-        {
-          path: 'dashboard',
-          loadComponent: () => import('./pages/home-prof-sante/home-prof-sante.component')
         },
         {
           path: 'patients',
